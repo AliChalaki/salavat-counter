@@ -3,190 +3,616 @@
 <head>
   <meta charset="UTF-8">
   <title>صلوات شمار پیشرفته</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* استایل‌ها اینجا هستند، بدون تغییر */
+    :root {
+      --primary-color: #5D3FD3;
+      --secondary-color: #3A1CA6;
+      --accent-color: #FF6B6B;
+      --light-color: #F8F9FA;
+      --dark-color: #2C3E50;
+      --gold-color: #FFD700;
+      --silver-color: #C0C0C0;
+      --bronze-color: #CD7F32;
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      margin: 0;
+      font-family: "Vazir", sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e6e9f0 100%);
+      color: var(--dark-color);
+      text-align: center;
+      padding: 0 15px;
+      min-height: 100vh;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    header {
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+      color: white;
+      padding: 15px 10px;
+      border-radius: 0 0 20px 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+
+    .header-title {
+      font-size: 1.2rem;
+      margin: 0;
+    }
+
+    .zekr {
+      font-size: 0.9rem;
+      margin: 8px 0 0;
+      color: rgba(255,255,255,0.9);
+    }
+
+    .main-container {
+      display: flex;
+      flex-direction: column;
+      max-width: 800px;
+      margin: 0 auto;
+      gap: 20px;
+      padding-bottom: 30px;
+    }
+
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      background-color: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+
+    .user-greeting {
+      font-size: 1.2rem;
+      color: var(--secondary-color);
+      margin-bottom: 5px;
+    }
+
+    .circle-btn {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: white;
+      box-shadow: 0 10px 25px rgba(93, 63, 211, 0.2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 5px solid var(--primary-color);
+      overflow: hidden;
+      position: relative;
+    }
+
+    @media (max-width: 480px) {
+      .circle-btn {
+        width: 150px;
+        height: 150px;
+      }
+    }
+
+    .circle-btn:hover {
+      transform: scale(1.03);
+      box-shadow: 0 15px 30px rgba(93, 63, 211, 0.3);
+    }
+
+    .circle-btn:active {
+      transform: scale(0.98);
+    }
+
+    .circle-btn img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 15px;
+    }
+
+    .counter-text {
+      font-size: 1.3rem;
+      color: var(--secondary-color);
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .features-section {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    .book-btn {
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+      color: white;
+      padding: 12px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: bold;
+      box-shadow: 0 5px 15px rgba(93, 63, 211, 0.2);
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1rem;
+    }
+
+    .book-btn:active {
+      transform: translateY(2px);
+    }
+
+    .leaderboard {
+      background-color: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .leaderboard h3 {
+      margin: 0 0 15px;
+      color: var(--primary-color);
+      font-size: 1.3rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .leaderboard h3:after {
+      content: '';
+      position: absolute;
+      width: 50%;
+      height: 3px;
+      background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+      bottom: -8px;
+      left: 25%;
+      border-radius: 3px;
+    }
+
+    .leaderboard-list {
+      list-style: none;
+      padding: 0;
+      text-align: right;
+      margin: 0;
+    }
+
+    .leaderboard-item {
+      padding: 12px 15px;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+      border-radius: 10px;
+      margin: 8px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: rgba(245, 245, 245, 0.5);
+    }
+
+    .leaderboard-item:first-child {
+      background-color: rgba(255, 215, 0, 0.1);
+      border-left: 3px solid var(--gold-color);
+    }
+
+    .leaderboard-item:nth-child(2) {
+      background-color: rgba(192, 192, 192, 0.1);
+      border-left: 3px solid var(--silver-color);
+    }
+
+    .leaderboard-item:nth-child(3) {
+      background-color: rgba(205, 127, 50, 0.1);
+      border-left: 3px solid var(--bronze-color);
+    }
+
+    .user-rank {
+      font-weight: bold;
+      color: var(--secondary-color);
+      font-size: 0.9rem;
+      min-width: 25px;
+    }
+
+    .user-name {
+      flex-grow: 1;
+      text-align: right;
+      padding: 0 10px;
+      font-size: 0.95rem;
+    }
+
+    .user-count {
+      font-weight: bold;
+      color: var(--primary-color);
+      font-size: 0.9rem;
+    }
+
+    .menu-buttons {
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 20px;
+      width: 100%;
+    }
+
+    .menu-btn {
+      background-color: white;
+      border: 2px solid var(--secondary-color);
+      color: var(--secondary-color);
+      padding: 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .menu-btn:active {
+      transform: translateY(2px);
+    }
+
+    @font-face {
+      font-family: "Vazir";
+      src: url("https://cdn.fontcdn.ir/Font/Persian/Vazir/Vazir.woff2") format("woff2");
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+      100% { transform: scale(1); }
+    }
+    
+    .pulse {
+      animation: pulse 1.5s infinite;
+    }
+
+    .medal-icon {
+      font-size: 1rem;
+    }
+
+    .gold {
+      color: var(--gold-color);
+    }
+
+    .silver {
+      color: var(--silver-color);
+    }
+
+    .bronze {
+      color: var(--bronze-color);
+    }
+
+    /* بهبود نمایش در موبایل */
+    @media (max-width: 768px) {
+      header {
+        padding: 12px 8px;
+        border-radius: 0 0 15px 15px;
+      }
+      
+      .header-title {
+        font-size: 1rem;
+      }
+      
+      .zekr {
+        font-size: 0.8rem;
+      }
+      
+      .main-content {
+        padding: 15px;
+      }
+      
+      .user-greeting {
+        font-size: 1.1rem;
+      }
+      
+      .counter-text {
+        font-size: 1.1rem;
+      }
+      
+      .book-btn {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+      }
+      
+      .leaderboard {
+        padding: 15px;
+      }
+      
+      .leaderboard h3 {
+        font-size: 1.1rem;
+      }
+      
+      .leaderboard-item {
+        padding: 10px 12px;
+      }
+      
+      .menu-btn {
+        padding: 10px;
+        font-size: 0.9rem;
+      }
+    }
   </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+
   <header>
-    <h2>ذکر روز <span id="weekday-name"></span>: <span id="today-zekr"></span></h2>
+    <h1 class="header-title">ذکر روز <span id="weekday-name"></span>: <span id="today-zekr"></span></h1>
     <div class="zekr">تاریخ امروز: <span id="today-date"></span></div>
   </header>
 
   <div class="main-container">
     <div class="main-content">
       <div class="user-greeting">سلام <span id="username"></span>! 👋</div>
+      
       <div class="circle-btn pulse" onclick="increase()" id="salavat-btn">
         <img src="Salavat.png" alt="صلوات">
       </div>
+      
       <div class="counter-text">تعداد صلوات شما: <span id="count">0</span></div>
+      
       <div class="features-section">
         <button class="book-btn" onclick="toggleMenu()">
-          <i class="fas fa-book-open"></i><span>کتابخانه ادعیه</span>
+          <i class="fas fa-book-open"></i>
+          <span>کتابخانه ادعیه</span>
         </button>
       </div>
+      
       <div class="menu-buttons" id="menu-buttons">
-        <button class="menu-btn" onclick="showQuran()"><i class="fas fa-quran"></i>قرائت قرآن</button>
-        <button class="menu-btn" onclick="showFaraj()"><i class="fas fa-hands-praying"></i>دعای فرج</button>
-        <button class="menu-btn" onclick="showNadeh()"><i class="fas fa-person-praying"></i>دعای ندبه</button>
-        <button class="menu-btn" onclick="showAshura()"><i class="fas fa-kaaba"></i>زیارت عاشورا</button>
+        <button class="menu-btn" onclick="showQuran()">
+          <i class="fas fa-quran"></i>
+          قرائت قرآن
+        </button>
+        <button class="menu-btn" onclick="showFaraj()">
+          <i class="fas fa-hands-praying"></i>
+          دعای فرج
+        </button>
+        <button class="menu-btn" onclick="showNadeh()">
+          <i class="fas fa-person-praying"></i>
+          دعای ندبه
+        </button>
+        <button class="menu-btn" onclick="showAshura()">
+          <i class="fas fa-kaaba"></i>
+          زیارت عاشورا
+        </button>
       </div>
     </div>
+    
     <div class="leaderboard">
       <h3><i class="fas fa-trophy medal-icon gold"></i> نفرات برتر <i class="fas fa-trophy medal-icon silver"></i></h3>
       <ul class="leaderboard-list" id="top-users">
-        <li class="leaderboard-item"><span class="user-rank">1</span><span class="user-name">محمد</span><span class="user-count">120 صلوات</span></li>
-        <li class="leaderboard-item"><span class="user-rank">2</span><span class="user-name">فاطمه</span><span class="user-count">95 صلوات</span></li>
-        <li class="leaderboard-item"><span class="user-rank">3</span><span class="user-name">علی</span><span class="user-count">80 صلوات</span></li>
-        <li class="leaderboard-item"><span class="user-rank">4</span><span class="user-name">زهرا</span><span class="user-count">65 صلوات</span></li>
-        <li class="leaderboard-item"><span class="user-rank">5</span><span class="user-name">حسین</span><span class="user-count">50 صلوات</span></li>
+        <li class="leaderboard-item">
+          <span class="user-rank">1</span>
+          <span class="user-name">محمد</span>
+          <span class="user-count">120 صلوات</span>
+        </li>
+        <li class="leaderboard-item">
+          <span class="user-rank">2</span>
+          <span class="user-name">فاطمه</span>
+          <span class="user-count">95 صلوات</span>
+        </li>
+        <li class="leaderboard-item">
+          <span class="user-rank">3</span>
+          <span class="user-name">علی</span>
+          <span class="user-count">80 صلوات</span>
+        </li>
+        <li class="leaderboard-item">
+          <span class="user-rank">4</span>
+          <span class="user-name">زهرا</span>
+          <span class="user-count">65 صلوات</span>
+        </li>
+        <li class="leaderboard-item">
+          <span class="user-rank">5</span>
+          <span class="user-name">حسین</span>
+          <span class="user-count">50 صلوات</span>
+        </li>
       </ul>
     </div>
   </div>
 
   <script>
-    const zekrHaft = ["یا رب العالمین", "یا ذالجلال و الاکرام", "یا قاضی الحاجات", "یا ارحم الراحمین", "یا حی یا قیوم", "یا ارحم الراحمین", "اللهم صل علی محمد و آل محمد"];
-    const weekdays = ["شنبه", "یک‌شنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنج‌شنبه", "جمعه"];
-    const today = new Date();
-    const jsDay = today.getDay();
-    const weekDay = (jsDay + 1) % 7;
+    // تنظیم تاریخ و ذکر روز
+    function setupDateTime() {
+      const zekrHaft = [
+        "یا رب العالمین", "یا ذالجلال و الاکرام", "یا قاضی الحاجات",
+        "یا ارحم الراحمین", "یا حی یا قیوم", "یا ارحم الراحمین", "اللهم صل علی محمد و آل محمد"
+      ];
+      const weekdays = ["شنبه", "یک‌شنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنج‌شنبه", "جمعه"];
+      const today = new Date();
+      const jsDay = today.getDay();
+      const weekDay = (jsDay + 1) % 7;
 
-    document.getElementById('today-zekr').textContent = zekrHaft[weekDay];
-    document.getElementById('weekday-name').textContent = weekdays[weekDay];
-    const persianDate = new Intl.DateTimeFormat('fa-IR-u-nu-latn', { dateStyle: 'full' }).format(today);
-    document.getElementById('today-date').textContent = persianDate;
-
-    let name = localStorage.getItem('username');
-    if (!name) {
-      Swal.fire({
-        title: 'سلام دوست عزیز!',
-        text: 'لطفاً نام خود را وارد کنید:',
-        input: 'text',
-        inputPlaceholder: 'نام شما...',
-        background: '#f8f9fa',
-        confirmButtonColor: '#5D3FD3',
-        showCancelButton: false,
-        allowOutsideClick: false,
-        inputValidator: (value) => {
-          if (!value) {
-            return 'لطفاً نام خود را وارد کنید!';
-          }
-        }
-      }).then((result) => {
-        if (result.value) {
-          name = result.value;
-          localStorage.setItem('username', name);
-          document.getElementById('username').textContent = name;
-        }
-      });
-    } else {
-      document.getElementById('username').textContent = name;
+      document.getElementById('today-zekr').textContent = zekrHaft[weekDay];
+      document.getElementById('weekday-name').textContent = weekdays[weekDay];
+      
+      // نمایش تاریخ به صورت کامل
+      const persianDate = new Intl.DateTimeFormat('fa-IR-u-nu-latn', { 
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        weekday: 'long'
+      }).format(today);
+      
+      document.getElementById('today-date').textContent = persianDate;
     }
 
-    let count = parseInt(localStorage.getItem('salavatCount') || '0');
-    document.getElementById('count').textContent = count;
-
-    let isPlaying = false;
-
-    function increase() {
-      if (isPlaying) return;
-      isPlaying = true;
-
-      const btn = document.getElementById("salavat-btn");
-      btn.classList.remove("pulse");
-      btn.style.opacity = 0.7;
-      btn.style.transform = "scale(0.95)";
-
-      const salawatText = "اللهم صل علی محمد و آل محمد";
-      let i = 0, typedText = "";
-
-      Swal.fire({
-        title: 'صلوات',
-        html: `<div id="typing-text" style="font-size: 24px; color: #5D3FD3; min-height: 60px;"></div>`,
-        showConfirmButton: false,
-        allowOutsideClick: false,
-        background: '#f8f9fa',
-        didOpen: () => {
-          const interval = setInterval(() => {
-            if (i < salawatText.length) {
-              typedText += salawatText[i++];
-              document.getElementById("typing-text").innerHTML = typedText;
-            } else {
-              clearInterval(interval);
-              setTimeout(() => {
-                Swal.close();
-                completeSalawat();
-              }, 500);
+    // مدیریت نام کاربر
+    function setupUsername() {
+      let name = localStorage.getItem('username');
+      if (!name) {
+        Swal.fire({
+          title: 'سلام دوست عزیز!',
+          text: 'لطفاً نام خود را وارد کنید:',
+          input: 'text',
+          inputPlaceholder: 'نام شما...',
+          background: '#f8f9fa',
+          confirmButtonColor: '#5D3FD3',
+          showCancelButton: false,
+          allowOutsideClick: false,
+          inputValidator: (value) => {
+            if (!value) {
+              return 'لطفاً نام خود را وارد کنید!';
             }
-          }, 100);
-        }
-      });
-
-      function completeSalawat() {
-        count++;
-        localStorage.setItem('salavatCount', count);
-        document.getElementById('count').textContent = count;
-        isPlaying = false;
-        btn.style.opacity = 1;
-        btn.style.transform = "scale(1)";
-        btn.classList.add("pulse");
+          }
+        }).then((result) => {
+          if (result.value) {
+            name = result.value;
+            localStorage.setItem('username', name);
+            document.getElementById('username').textContent = name;
+          }
+        });
+      } else {
+        document.getElementById('username').textContent = name;
       }
     }
 
-    function toggleMenu() {
-      const menu = document.getElementById("menu-buttons");
-      menu.style.display = menu.style.display === "flex" ? "none" : "flex";
-    }
+    // مدیریت صلوات شمار
+    function setupSalavatCounter() {
+      let count = parseInt(localStorage.getItem('salavatCount')) || 0;
+      document.getElementById('count').textContent = count;
+      let isPlaying = false;
 
-    function typeTextInPopup(title, text) {
-      let i = 0;
-      let typedText = "";
-      Swal.fire({
-        title,
-        html: `<div id="typing-text" style="font-size: 22px; color: #5D3FD3; min-height: 300px; text-align: right; line-height: 2.5; padding: 15px;"></div>`,
-        showConfirmButton: true,
-        confirmButtonText: 'بستن',
-        confirmButtonColor: '#5D3FD3',
-        background: '#f8f9fa',
-        didOpen: () => {
-          const interval = setInterval(() => {
-            if (i < text.length) {
-              typedText += text[i++];
-              document.getElementById("typing-text").innerHTML = typedText;
-            } else {
-              clearInterval(interval);
-            }
-          }, 50);
+      window.increase = function() {
+        if (isPlaying) return;
+
+        isPlaying = true;
+        const btn = document.getElementById("salavat-btn");
+        btn.classList.remove("pulse");
+        btn.style.opacity = "0.7";
+        btn.style.transform = "scale(0.95)";
+
+        const salawatText = "اللهم صل علی محمد و آل محمد";
+        let i = 0;
+        let typedText = "";
+        
+        Swal.fire({
+          title: 'صلوات',
+          html: `<div id="typing-text" style="font-size: 1.3rem; color: #5D3FD3; min-height: 80px; line-height: 2;"></div>`,
+          showConfirmButton: false,
+          allowOutsideClick: false,
+          background: '#f8f9fa',
+          didOpen: () => {
+            const typingInterval = setInterval(() => {
+              if (i < salawatText.length) {
+                typedText += salawatText.charAt(i);
+                document.getElementById("typing-text").innerHTML = typedText;
+                i++;
+              } else {
+                clearInterval(typingInterval);
+                setTimeout(() => {
+                  Swal.close();
+                  completeSalawat();
+                }, 500);
+              }
+            }, 100);
+          }
+        });
+
+        function completeSalawat() {
+          count++;
+          localStorage.setItem('salavatCount', count);
+          document.getElementById('count').textContent = count;
+
+          isPlaying = false;
+          btn.style.opacity = "1";
+          btn.style.transform = "scale(1)";
+          btn.classList.add("pulse");
         }
+      }
+    }
+
+    // مدیریت منوی ادعیه
+    function setupPrayerMenu() {
+      window.toggleMenu = function() {
+        const menu = document.getElementById("menu-buttons");
+        if (menu.style.display === "flex") {
+          menu.style.display = "none";
+        } else {
+          menu.style.display = "flex";
+        }
+      }
+
+      window.showQuran = function() {
+        const quranText = "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ\nقُلْ هُوَ اللَّهُ أَحَدٌ\nاللَّهُ الصَّمَدُ\nلَمْ يَلِدْ وَلَمْ يُولَدْ\nوَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ";
+        typeTextInPopup("قرائت قرآن (سوره توحید)", quranText);
+      }
+
+      window.showFaraj = function() {
+        const farajText = "اللَّهُمَّ كُنْ لِوَلِيِّكَ الْحُجَّةِ بْنِ الْحَسَنِ\nصَلَوَاتُكَ عَلَيْهِ وَعَلَى آبَائِهِ\nفِي هَذِهِ السَّاعَةِ وَفِي كُلِّ سَاعَةٍ\nوَلِيًّا وَحَافِظًا وَقَائِدًا وَنَاصِرًا\nوَدَلِيلًا وَعَيْناً حَتَّى تُسْكِنَهُ أَرْضَكَ طَوْعًا\nوَتُمَتِّعَهُ فِيهَا طَوِيلًا";
+        typeTextInPopup("دعای فرج", farajText);
+      }
+
+      window.showNadeh = function() {
+        const nadehText = "اللَّهُمَّ إِنِّي أَشْكُو إِلَيْكَ\nفَقْدَ نَبِيِّنَا صَلَوَاتُكَ عَلَيْهِ وَآلِهِ\nوَغَيْبَةَ وَلِيِّنَا\nوَكَثْرَةَ عَدُوِّنَا\nوَقِلَّةَ عَدَدِنَا\nوَشِدَّةَ الْفِتَنِ بِنَا\nوَتَظَاهُرَ الزَّمَانِ عَلَيْنَا";
+        typeTextInPopup("دعای ندبه", nadehText);
+      }
+
+      window.showAshura = function() {
+        Swal.fire({
+          title: 'زیارت عاشورا',
+          text: 'این بخش در حال ساخت می‌باشد',
+          icon: 'info',
+          confirmButtonColor: '#5D3FD3',
+          confirmButtonText: 'متوجه شدم'
+        });
+      }
+
+      function typeTextInPopup(title, text) {
+        let i = 0;
+        let typedText = "";
+        
+        Swal.fire({
+          title: title,
+          html: `<div id="typing-text" style="font-size: 1.1rem; color: #5D3FD3; min-height: 200px; text-align: right; line-height: 2.5; padding: 10px;"></div>`,
+          showConfirmButton: true,
+          confirmButtonText: 'بستن',
+          confirmButtonColor: '#5D3FD3',
+          background: '#f8f9fa',
+          width: '90%',
+          didOpen: () => {
+            const typingInterval = setInterval(() => {
+              if (i < text.length) {
+                typedText += text.charAt(i);
+                document.getElementById("typing-text").innerHTML = typedText.replace(/\n/g, '<br>');
+                i++;
+              } else {
+                clearInterval(typingInterval);
+              }
+            }, 50);
+          }
+        });
+      }
+    }
+
+    // راه اندازی تمام بخش‌ها
+    document.addEventListener('DOMContentLoaded', function() {
+      setupDateTime();
+      setupUsername();
+      setupSalavatCounter();
+      setupPrayerMenu();
+      
+      // بهبود عملکرد تاچ در موبایل
+      document.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('touchstart', function() {
+          this.style.transform = 'translateY(2px)';
+        });
+        btn.addEventListener('touchend', function() {
+          this.style.transform = '';
+        });
       });
-    }
-
-    function showQuran() {
-      const text = "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ\nقُلْ هُوَ اللَّهُ أَحَدٌ\nاللَّهُ الصَّمَدُ\nلَمْ يَلِدْ وَلَمْ يُولَدْ\nوَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ";
-      typeTextInPopup("قرائت قرآن (سوره توحید)", text);
-    }
-
-    function showFaraj() {
-      const text = "اللَّهُمَّ كُنْ لِوَلِيِّكَ الْحُجَّةِ بْنِ الْحَسَنِ...";
-      typeTextInPopup("دعای فرج", text);
-    }
-
-    function showNadeh() {
-      const text = "اللَّهُمَّ إِنِّي أَشْكُو إِلَيْكَ...";
-      typeTextInPopup("دعای ندبه", text);
-    }
-
-    function showAshura() {
-      Swal.fire({
-        title: 'زیارت عاشورا',
-        text: 'این بخش در حال ساخت می‌باشد',
-        icon: 'info',
-        confirmButtonColor: '#5D3FD3'
-      });
-    }
+    });
   </script>
+
 </body>
 </html>
