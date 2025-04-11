@@ -35,33 +35,6 @@
       gap: 30px;
     }
 
-    .circle-btn {
-      width: 180px;
-      height: 180px;
-      border-radius: 50%;
-      background-color: white;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      transition: 0.3s;
-      border: 4px solid #00c853;
-      overflow: hidden;
-    }
-
-    .circle-btn:hover {
-      transform: scale(1.05);
-      border-color: #2e7d32;
-    }
-
-    .circle-btn img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
-    }
-
     .counter-text {
       font-size: 24px;
       color: #2e7d32;
@@ -96,28 +69,72 @@
       font-family: "Vazir";
       src: url("https://cdn.fontcdn.ir/Font/Persian/Vazir/Vazir.woff2") format("woff2");
     }
+
+    .popup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .popup-content {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      width: 300px;
+    }
+
+    .popup input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+    }
+
+    .popup button {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .popup button:hover {
+      background-color: #0056b3;
+    }
   </style>
 </head>
 <body>
 
-  <div id="initial-page">
-    <h2>لطفاً نام خود را وارد کنید</h2>
-    <input type="text" id="username-input" placeholder="نام شما" />
-    <button onclick="startApp()">شروع</button>
+  <div id="popup" class="popup">
+    <div class="popup-content">
+      <h2>لطفاً نام خود را وارد کنید</h2>
+      <input type="text" id="username-input" placeholder="نام شما" />
+      <button onclick="startApp()">شروع</button>
+    </div>
   </div>
 
   <div id="main-page" style="display: none;">
     <header>
       <h2>ذکر روز <span id="weekday-name"></span>: <span id="today-zekr"></span></h2>
       <div class="zekr">تاریخ امروز: <span id="today-date"></span></div>
-      <div>🕒 اوقات شرعی: (در آینده اضافه می‌کنیم)</div>
     </header>
 
     <div class="main">
       <h2>سلام <span id="username"></span>!</h2>
-      <div class="circle-btn" onclick="increase()" id="salavat-btn">
-        <img src="salavat.png" alt="صلوات">
+      <div>
+        <textarea id="salavat-input" placeholder="صلوات خود را تایپ کنید..." rows="4" cols="50" disabled></textarea>
       </div>
+      <button id="submit-btn" onclick="submitSalavat()" disabled>ارسال صلوات</button>
       <div class="counter-text">تعداد صلوات شما: <span id="count">0</span></div>
     </div>
 
@@ -157,7 +174,7 @@
 
       localStorage.setItem("username", name);
       document.getElementById("username").textContent = name;
-      document.getElementById("initial-page").style.display = "none";
+      document.getElementById("popup").style.display = "none";
       document.getElementById("main-page").style.display = "block";
 
       // ادامه روند
@@ -170,6 +187,7 @@
       document.getElementById('today-date').textContent = persianDate;
 
       updateLeaderboard(name);
+      enableSalavatInput();
     }
 
     const zekrHaft = [
@@ -179,15 +197,25 @@
     const weekdays = ["شنبه", "یک‌شنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنج‌شنبه", "جمعه"];
     
     let count = 0;
-    let isPlaying = false;
 
-    function increase() {
-      if (isPlaying) return;
+    function enableSalavatInput() {
+      const salavatInput = document.getElementById("salavat-input");
+      const submitBtn = document.getElementById("submit-btn");
 
-      isPlaying = true;
-      const btn = document.getElementById("salavat-btn");
-      btn.style.opacity = 0.5;
+      salavatInput.disabled = false;
+      submitBtn.disabled = false;
+    }
 
+    function submitSalavat() {
+      const salavatInput = document.getElementById("salavat-input");
+      const submitBtn = document.getElementById("submit-btn");
+
+      if (salavatInput.value.trim() === "") {
+        alert("لطفاً صلوات خود را وارد کنید.");
+        return;
+      }
+
+      // پخش صلوات و شمارش آن
       const audio = document.getElementById("salavat-audio");
       audio.currentTime = 0;
       audio.play();
@@ -196,26 +224,30 @@
         count++;
         localStorage.setItem('salavatCount', count);
         document.getElementById('count').textContent = count;
-        await updateLeaderboard(name);
+        await updateLeaderboard(localStorage.getItem("username"));
 
-        isPlaying = false;
-        btn.style.opacity = 1;
+        // غیر فعال کردن دکمه‌ها و متن
+        submitBtn.disabled = true;
+        salavatInput.disabled = true;
       };
     }
 
     async function updateLeaderboard(username) {
       try {
+        const todayDate = new Date().toLocaleDateString();
+
         // ذخیره یا آپدیت کاربر در Firestore
         await db.collection("leaderboard")
-          .doc(`${username}-${new Date().toLocaleDateString()}`)
+          .doc(`${username}-${todayDate}`)
           .set({
             name: username,
-            count: count
+            count: count,
+            date: todayDate
           });
 
-        // گرفتن ۱۰ کاربر برتر برای همون روز
+        // گرفتن ۱۰ کاربر برتر برای همان روز
         const snapshot = await db.collection("leaderboard")
-          .where("name", "==", username)
+          .where("date", "==", todayDate)
           .orderBy("count", "desc")
           .limit(10)
           .get();
