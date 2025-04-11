@@ -113,8 +113,8 @@
     .circle-btn img {
       width: 100%;
       height: 100%;
-      object-fit: contain;
-      padding: 15px;
+      object-fit: cover;
+      border-radius: 50%;
     }
 
     .counter-text {
@@ -124,14 +124,15 @@
       margin-top: 10px;
     }
 
-    .features-section {
+    .action-buttons {
       display: flex;
       justify-content: center;
+      gap: 15px;
       width: 100%;
       margin-top: 15px;
     }
 
-    .book-btn {
+    .action-btn {
       background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
       color: white;
       padding: 12px 20px;
@@ -145,120 +146,12 @@
       align-items: center;
       gap: 8px;
       font-size: 1rem;
-    }
-
-    .book-btn:active {
-      transform: translateY(2px);
-    }
-
-    .leaderboard {
-      background-color: white;
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-      width: 100%;
-      margin-top: 20px;
-    }
-
-    .leaderboard h3 {
-      margin: 0 0 15px;
-      color: var(--primary-color);
-      font-size: 1.3rem;
-      position: relative;
-      display: inline-block;
-    }
-
-    .leaderboard h3:after {
-      content: '';
-      position: absolute;
-      width: 50%;
-      height: 3px;
-      background: linear-gradient(to right, var(--primary-color), var(--accent-color));
-      bottom: -8px;
-      left: 25%;
-      border-radius: 3px;
-    }
-
-    .leaderboard-list {
-      list-style: none;
-      padding: 0;
-      text-align: right;
-      margin: 0;
-    }
-
-    .leaderboard-item {
-      padding: 12px 15px;
-      border-bottom: 1px solid rgba(0,0,0,0.05);
-      transition: all 0.3s ease;
-      border-radius: 10px;
-      margin: 8px 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: rgba(245, 245, 245, 0.5);
-    }
-
-    .leaderboard-item:first-child {
-      background-color: rgba(255, 215, 0, 0.1);
-      border-left: 3px solid var(--gold-color);
-    }
-
-    .leaderboard-item:nth-child(2) {
-      background-color: rgba(192, 192, 192, 0.1);
-      border-left: 3px solid var(--silver-color);
-    }
-
-    .leaderboard-item:nth-child(3) {
-      background-color: rgba(205, 127, 50, 0.1);
-      border-left: 3px solid var(--bronze-color);
-    }
-
-    .user-rank {
-      font-weight: bold;
-      color: var(--secondary-color);
-      font-size: 0.9rem;
-      min-width: 25px;
-    }
-
-    .user-name {
-      flex-grow: 1;
-      text-align: right;
-      padding: 0 10px;
-      font-size: 0.95rem;
-    }
-
-    .user-count {
-      font-weight: bold;
-      color: var(--primary-color);
-      font-size: 0.9rem;
-    }
-
-    .menu-buttons {
-      display: none;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 20px;
-      width: 100%;
-    }
-
-    .menu-btn {
-      background-color: white;
-      border: 2px solid var(--secondary-color);
-      color: var(--secondary-color);
-      padding: 12px;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-weight: bold;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      font-size: 0.95rem;
-      display: flex;
-      align-items: center;
+      flex: 1;
       justify-content: center;
-      gap: 8px;
+      max-width: 200px;
     }
 
-    .menu-btn:active {
+    .action-btn:active {
       transform: translateY(2px);
     }
 
@@ -320,26 +213,21 @@
         font-size: 1.1rem;
       }
       
-      .book-btn {
+      .action-btn {
         padding: 10px 15px;
         font-size: 0.9rem;
       }
-      
-      .leaderboard {
-        padding: 15px;
+    }
+
+    @media (max-width: 480px) {
+      .action-buttons {
+        flex-direction: column;
+        align-items: center;
       }
       
-      .leaderboard h3 {
-        font-size: 1.1rem;
-      }
-      
-      .leaderboard-item {
-        padding: 10px 12px;
-      }
-      
-      .menu-btn {
-        padding: 10px;
-        font-size: 0.9rem;
+      .action-btn {
+        max-width: 100%;
+        width: 100%;
       }
     }
   </style>
@@ -362,62 +250,16 @@
       
       <div class="counter-text">تعداد صلوات شما: <span id="count">0</span></div>
       
-      <div class="features-section">
-        <button class="book-btn" onclick="toggleMenu()">
+      <div class="action-buttons">
+        <button class="action-btn" onclick="showPrayerBook()">
           <i class="fas fa-book-open"></i>
-          <span>کتابخانه ادعیه</span>
+          <span>کتاب ادعیه</span>
+        </button>
+        <button class="action-btn" onclick="showLeaderboard()">
+          <i class="fas fa-trophy"></i>
+          <span>نفرات برتر</span>
         </button>
       </div>
-      
-      <div class="menu-buttons" id="menu-buttons">
-        <button class="menu-btn" onclick="showQuran()">
-          <i class="fas fa-quran"></i>
-          قرائت قرآن
-        </button>
-        <button class="menu-btn" onclick="showFaraj()">
-          <i class="fas fa-hands-praying"></i>
-          دعای فرج
-        </button>
-        <button class="menu-btn" onclick="showNadeh()">
-          <i class="fas fa-person-praying"></i>
-          دعای ندبه
-        </button>
-        <button class="menu-btn" onclick="showAshura()">
-          <i class="fas fa-kaaba"></i>
-          زیارت عاشورا
-        </button>
-      </div>
-    </div>
-    
-    <div class="leaderboard">
-      <h3><i class="fas fa-trophy medal-icon gold"></i> نفرات برتر <i class="fas fa-trophy medal-icon silver"></i></h3>
-      <ul class="leaderboard-list" id="top-users">
-        <li class="leaderboard-item">
-          <span class="user-rank">1</span>
-          <span class="user-name">محمد</span>
-          <span class="user-count">120 صلوات</span>
-        </li>
-        <li class="leaderboard-item">
-          <span class="user-rank">2</span>
-          <span class="user-name">فاطمه</span>
-          <span class="user-count">95 صلوات</span>
-        </li>
-        <li class="leaderboard-item">
-          <span class="user-rank">3</span>
-          <span class="user-name">علی</span>
-          <span class="user-count">80 صلوات</span>
-        </li>
-        <li class="leaderboard-item">
-          <span class="user-rank">4</span>
-          <span class="user-name">زهرا</span>
-          <span class="user-count">65 صلوات</span>
-        </li>
-        <li class="leaderboard-item">
-          <span class="user-rank">5</span>
-          <span class="user-name">حسین</span>
-          <span class="user-count">50 صلوات</span>
-        </li>
-      </ul>
     </div>
   </div>
 
@@ -532,20 +374,203 @@
       }
     }
 
-    // مدیریت منوی ادعیه
-    function setupPrayerMenu() {
-      window.toggleMenu = function() {
-        const menu = document.getElementById("menu-buttons");
-        if (menu.style.display === "flex") {
-          menu.style.display = "none";
-        } else {
-          menu.style.display = "flex";
+    // مدیریت منوی ادعیه و لیست برترین‌ها
+    function setupMenus() {
+      let currentSurahIndex = 0;
+      const surahs = [
+        {
+          title: "سوره حمد",
+          text: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ\nالْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ\nالرَّحْمَٰنِ الرَّحِيمِ\nمَالِكِ يَوْمِ الدِّينِ\nإِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ\nاهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ\nصِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ"
+        },
+        {
+          title: "سوره توحید",
+          text: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ\nقُلْ هُوَ اللَّهُ أَحَدٌ\nاللَّهُ الصَّمَدُ\nلَمْ يَلِدْ وَلَمْ يُولَدْ\nوَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ"
+        },
+        {
+          title: "سوره کوثر",
+          text: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ\nإِنَّا أَعْطَيْنَاكَ الْكَوْثَرَ\nفَصَلِّ لِرَبِّكَ وَانْحَرْ\nإِنَّ شَانِئَكَ هُوَ الْأَبْتَرُ"
+        },
+        {
+          title: "آیت الکرسی",
+          text: "اللَّهُ لاَ إِلَهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلاَّ بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلاَ يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلاَّ بِمَا شَاء وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالأَرْضَ وَلاَ يَؤُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ"
         }
+      ];
+
+      window.showPrayerBook = function() {
+        Swal.fire({
+          title: 'کتاب ادعیه',
+          html: `
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
+              <button onclick="showQuran()" style="
+                background: linear-gradient(to right, #5D3FD3, #3A1CA6);
+                color: white;
+                padding: 12px;
+                border-radius: 8px;
+                border: none;
+                cursor: pointer;
+                font-weight: bold;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+              ">
+                <i class="fas fa-quran"></i>
+                قرائت قرآن
+              </button>
+              
+              <button onclick="showFaraj()" style="
+                background: linear-gradient(to right, #5D3FD3, #3A1CA6);
+                color: white;
+                padding: 12px;
+                border-radius: 8px;
+                border: none;
+                cursor: pointer;
+                font-weight: bold;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+              ">
+                <i class="fas fa-hands-praying"></i>
+                دعای فرج
+              </button>
+              
+              <button onclick="showNadeh()" style="
+                background: linear-gradient(to right, #5D3FD3, #3A1CA6);
+                color: white;
+                padding: 12px;
+                border-radius: 8px;
+                border: none;
+                cursor: pointer;
+                font-weight: bold;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+              ">
+                <i class="fas fa-person-praying"></i>
+                دعای ندبه
+              </button>
+              
+              <button onclick="showAshura()" style="
+                background: linear-gradient(to right, #5D3FD3, #3A1CA6);
+                color: white;
+                padding: 12px;
+                border-radius: 8px;
+                border: none;
+                cursor: pointer;
+                font-weight: bold;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+              ">
+                <i class="fas fa-kaaba"></i>
+                زیارت عاشورا
+              </button>
+            </div>
+          `,
+          showConfirmButton: false,
+          background: '#f8f9fa',
+          width: '90%'
+        });
+      }
+
+      window.showLeaderboard = function() {
+        Swal.fire({
+          title: 'نفرات برتر',
+          html: `
+            <div style="text-align: right; margin-top: 20px;">
+              <div style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 12px 15px;
+                border-bottom: 1px solid rgba(0,0,0,0.05);
+                background-color: rgba(255, 215, 0, 0.1);
+                border-left: 3px solid gold;
+                border-radius: 8px;
+                margin-bottom: 8px;
+              ">
+                <span style="font-weight: bold; color: #3A1CA6;">1</span>
+                <span style="flex-grow: 1; padding: 0 10px;">محمد</span>
+                <span style="font-weight: bold; color: #5D3FD3;">120 صلوات</span>
+              </div>
+              
+              <div style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 12px 15px;
+                border-bottom: 1px solid rgba(0,0,0,0.05);
+                background-color: rgba(192, 192, 192, 0.1);
+                border-left: 3px solid silver;
+                border-radius: 8px;
+                margin-bottom: 8px;
+              ">
+                <span style="font-weight: bold; color: #3A1CA6;">2</span>
+                <span style="flex-grow: 1; padding: 0 10px;">فاطمه</span>
+                <span style="font-weight: bold; color: #5D3FD3;">95 صلوات</span>
+              </div>
+              
+              <div style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 12px 15px;
+                border-bottom: 1px solid rgba(0,0,0,0.05);
+                background-color: rgba(205, 127, 50, 0.1);
+                border-left: 3px solid #CD7F32;
+                border-radius: 8px;
+                margin-bottom: 8px;
+              ">
+                <span style="font-weight: bold; color: #3A1CA6;">3</span>
+                <span style="flex-grow: 1; padding: 0 10px;">علی</span>
+                <span style="font-weight: bold; color: #5D3FD3;">80 صلوات</span>
+              </div>
+              
+              <div style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 12px 15px;
+                border-bottom: 1px solid rgba(0,0,0,0.05);
+                background-color: rgba(245, 245, 245, 0.5);
+                border-radius: 8px;
+                margin-bottom: 8px;
+              ">
+                <span style="font-weight: bold; color: #3A1CA6;">4</span>
+                <span style="flex-grow: 1; padding: 0 10px;">زهرا</span>
+                <span style="font-weight: bold; color: #5D3FD3;">65 صلوات</span>
+              </div>
+              
+              <div style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 12px 15px;
+                border-bottom: 1px solid rgba(0,0,0,0.05);
+                background-color: rgba(245, 245, 245, 0.5);
+                border-radius: 8px;
+              ">
+                <span style="font-weight: bold; color: #3A1CA6;">5</span>
+                <span style="flex-grow: 1; padding: 0 10px;">حسین</span>
+                <span style="font-weight: bold; color: #5D3FD3;">50 صلوات</span>
+              </div>
+            </div>
+          `,
+          showConfirmButton: false,
+          background: '#f8f9fa',
+          width: '90%'
+        });
       }
 
       window.showQuran = function() {
-        const quranText = "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ\nقُلْ هُوَ اللَّهُ أَحَدٌ\nاللَّهُ الصَّمَدُ\nلَمْ يَلِدْ وَلَمْ يُولَدْ\nوَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ";
-        typeTextInPopup("قرائت قرآن (سوره توحید)", quranText);
+        const surah = surahs[currentSurahIndex];
+        typeTextInPopup(surah.title, surah.text);
+        
+        // تغییر سوره برای دفعه بعدی
+        currentSurahIndex = (currentSurahIndex + 1) % surahs.length;
       }
 
       window.showFaraj = function() {
@@ -600,7 +625,7 @@
       setupDateTime();
       setupUsername();
       setupSalavatCounter();
-      setupPrayerMenu();
+      setupMenus();
       
       // بهبود عملکرد تاچ در موبایل
       document.querySelectorAll('button').forEach(btn => {
