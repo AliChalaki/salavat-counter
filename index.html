@@ -4,10 +4,6 @@
   <meta charset="UTF-8">
   <title>صلوات شمار پیشرفته</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- فونت وزیر از CDN مطمئن -->
-  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet" type="text/css" />
-
   <style>
     body {
       margin: 0;
@@ -95,34 +91,47 @@
       padding: 6px 0;
       border-bottom: 1px dashed #ccc;
     }
+
+    @font-face {
+      font-family: "Vazir";
+      src: url("https://cdn.fontcdn.ir/Font/Persian/Vazir/Vazir.woff2") format("woff2");
+    }
   </style>
 </head>
 <body>
 
-  <header>
-    <h2>ذکر روز <span id="weekday-name"></span>: <span id="today-zekr"></span></h2>
-    <div class="zekr">تاریخ امروز: <span id="today-date"></span></div>
-    <div>🕒 اوقات شرعی: (در آینده اضافه می‌کنیم)</div>
-  </header>
+  <div id="initial-page">
+    <h2>لطفاً نام خود را وارد کنید</h2>
+    <input type="text" id="username-input" placeholder="نام شما" />
+    <button onclick="startApp()">شروع</button>
+  </div>
 
-  <div class="main">
-    <h2>سلام <span id="username"></span>!</h2>
-    <div class="circle-btn" onclick="increase()" id="salavat-btn">
-      <img src="salavat.png" alt="صلوات">
+  <div id="main-page" style="display: none;">
+    <header>
+      <h2>ذکر روز <span id="weekday-name"></span>: <span id="today-zekr"></span></h2>
+      <div class="zekr">تاریخ امروز: <span id="today-date"></span></div>
+      <div>🕒 اوقات شرعی: (در آینده اضافه می‌کنیم)</div>
+    </header>
+
+    <div class="main">
+      <h2>سلام <span id="username"></span>!</h2>
+      <div class="circle-btn" onclick="increase()" id="salavat-btn">
+        <img src="salavat.png" alt="صلوات">
+      </div>
+      <div class="counter-text">تعداد صلوات شما: <span id="count">0</span></div>
     </div>
-    <div class="counter-text">تعداد صلوات شما: <span id="count">0</span></div>
+
+    <div class="leaderboard">
+      <h3>🏆 ۱۰ نفر برتر</h3>
+      <ul id="top-users"></ul>
+    </div>
+
+    <audio id="salavat-audio" src="salavat.mp3" preload="auto"></audio>
   </div>
 
-  <div class="leaderboard">
-    <h3>🏆 ۱۰ نفر برتر</h3>
-    <ul id="top-users"></ul>
-  </div>
-
-  <audio id="salavat-audio" src="salavat.mp3" preload="auto"></audio>
-
-  <!-- Firebase compat version (برای استفاده در پروژه HTML ساده) -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js"></script>
 
   <script>
     const firebaseConfig = {
@@ -135,35 +144,41 @@
       measurementId: "G-2W0QM3CKRV"
     };
 
-    firebase.initializeApp(firebaseConfig);
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-  </script>
 
-  <script>
+    function startApp() {
+      const name = document.getElementById("username-input").value.trim();
+      if (!name) {
+        alert("لطفاً نام خود را وارد کنید.");
+        return;
+      }
+
+      localStorage.setItem("username", name);
+      document.getElementById("username").textContent = name;
+      document.getElementById("initial-page").style.display = "none";
+      document.getElementById("main-page").style.display = "block";
+
+      // ادامه روند
+      const today = new Date();
+      const weekDay = (today.getDay() + 1) % 7;
+
+      document.getElementById('today-zekr').textContent = zekrHaft[weekDay];
+      document.getElementById('weekday-name').textContent = weekdays[weekDay];
+      const persianDate = new Intl.DateTimeFormat('fa-IR-u-nu-latn', { dateStyle: 'full' }).format(today);
+      document.getElementById('today-date').textContent = persianDate;
+
+      updateLeaderboard(name);
+    }
+
     const zekrHaft = [
       "یا رب العالمین", "یا ذالجلال و الاکرام", "یا قاضی الحاجات",
       "یا ارحم الراحمین", "یا حی یا قیوم", "یا ارحم الراحمین", "اللهم صل علی محمد و آل محمد"
     ];
     const weekdays = ["شنبه", "یک‌شنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنج‌شنبه", "جمعه"];
-    const today = new Date();
-    const jsDay = today.getDay();
-    const weekDay = (jsDay + 1) % 7;
-
-    document.getElementById('today-zekr').textContent = zekrHaft[weekDay];
-    document.getElementById('weekday-name').textContent = weekdays[weekDay];
-    const persianDate = new Intl.DateTimeFormat('fa-IR-u-nu-latn', { dateStyle: 'full' }).format(today);
-    document.getElementById('today-date').textContent = persianDate;
-
-    let name = localStorage.getItem('username');
-    if (!name) {
-      name = prompt("لطفاً نام خود را وارد کنید:");
-      localStorage.setItem('username', name);
-    }
-    document.getElementById('username').textContent = name;
-
-    let count = parseInt(localStorage.getItem('salavatCount') || 0);
-    document.getElementById('count').textContent = count;
-
+    
+    let count = 0;
     let isPlaying = false;
 
     function increase() {
@@ -181,21 +196,26 @@
         count++;
         localStorage.setItem('salavatCount', count);
         document.getElementById('count').textContent = count;
-        await updateLeaderboard(name, count);
+        await updateLeaderboard(name);
 
         isPlaying = false;
         btn.style.opacity = 1;
       };
     }
 
-    async function updateLeaderboard(username, count) {
+    async function updateLeaderboard(username) {
       try {
-        await db.collection("leaderboard").doc(username).set({
-          name: username,
-          count: count
-        });
+        // ذخیره یا آپدیت کاربر در Firestore
+        await db.collection("leaderboard")
+          .doc(`${username}-${new Date().toLocaleDateString()}`)
+          .set({
+            name: username,
+            count: count
+          });
 
+        // گرفتن ۱۰ کاربر برتر برای همون روز
         const snapshot = await db.collection("leaderboard")
+          .where("name", "==", username)
           .orderBy("count", "desc")
           .limit(10)
           .get();
@@ -210,8 +230,6 @@
         console.error("خطا در ذخیره یا بارگیری اطلاعات:", error);
       }
     }
-
-    updateLeaderboard(name, count);
   </script>
 
 </body>
