@@ -4,22 +4,35 @@
   <meta charset="UTF-8">
   <title>صلوات شمار پیشرفته</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- اضافه کردن کتابخانه SweetAlert برای پاپ آپ های زیبا -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
+    :root {
+      --primary-color: #6C63FF;
+      --secondary-color: #4D44DB;
+      --accent-color: #FF6584;
+      --light-color: #F8F9FA;
+      --dark-color: #343A40;
+      --success-color: #28A745;
+      --info-color: #17A2B8;
+    }
+    
     body {
       margin: 0;
       font-family: "Vazir", sans-serif;
-      background: linear-gradient(to bottom, #e0f7fa, #ffffff);
-      color: #333;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      color: var(--dark-color);
       text-align: center;
       padding: 0 20px;
+      min-height: 100vh;
     }
 
     header {
-      background-color: #007bff;
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
       color: white;
       padding: 15px 10px;
       border-radius: 0 0 20px 20px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
 
     .zekr {
@@ -39,97 +52,118 @@
       width: 180px;
       height: 180px;
       border-radius: 50%;
-      background-color: white;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      background: white;
+      box-shadow: 0 10px 30px rgba(108, 99, 255, 0.3);
       display: flex;
       justify-content: center;
       align-items: center;
       cursor: pointer;
-      transition: 0.3s;
-      border: 4px solid #00c853;
-      font-size: 20px;
-      font-weight: bold;
-      color: #00c853;
-    }
-
-    .circle-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
+      transition: all 0.3s ease;
+      border: 4px solid var(--primary-color);
+      overflow: hidden;
+      position: relative;
     }
 
     .circle-btn:hover {
       transform: scale(1.05);
-      border-color: #2e7d32;
+      box-shadow: 0 15px 35px rgba(108, 99, 255, 0.4);
+    }
+
+    .circle-btn:active {
+      transform: scale(0.98);
+    }
+
+    .circle-btn img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
     }
 
     .counter-text {
       font-size: 24px;
-      color: #2e7d32;
-    }
-
-    .typing-popup {
-      position: fixed;
-      top: 0; right: 0; bottom: 0; left: 0;
-      background: rgba(0, 0, 0, 0.5);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
-    }
-
-    .typing-box {
-      background: white;
-      padding: 30px;
-      border-radius: 15px;
-      font-size: 24px;
+      color: var(--secondary-color);
       font-weight: bold;
-      color: #007bff;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
     }
 
-    .name-popup {
-      position: fixed;
-      top: 0; right: 0; bottom: 0; left: 0;
-      background: rgba(0, 0, 0, 0.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-
-    .name-box {
-      background: white;
+    .leaderboard {
+      background-color: white;
       padding: 25px;
       border-radius: 15px;
-      width: 90%;
-      max-width: 400px;
-      text-align: center;
-      box-shadow: 0 6px 30px rgba(0,0,0,0.3);
+      box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+      max-width: 450px;
+      margin: 0 auto 40px auto;
+      border: 1px solid rgba(0,0,0,0.05);
     }
 
-    .name-box input {
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
-      margin-top: 10px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
+    .leaderboard h3 {
+      margin-bottom: 20px;
+      color: var(--primary-color);
+      font-size: 1.5rem;
+      position: relative;
+      display: inline-block;
     }
 
-    .name-box button {
-      margin-top: 15px;
-      background: #007bff;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 10px;
-      font-size: 16px;
-      cursor: pointer;
+    .leaderboard h3:after {
+      content: '';
+      position: absolute;
+      width: 50%;
+      height: 3px;
+      background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+      bottom: -8px;
+      left: 25%;
+      border-radius: 3px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      text-align: right;
+    }
+
+    li {
+      padding: 10px 15px;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+      border-radius: 8px;
+      margin: 5px 0;
+    }
+
+    li:hover {
+      background-color: rgba(108, 99, 255, 0.05);
+      transform: translateX(-5px);
+    }
+
+    li:nth-child(1) {
+      font-weight: bold;
+      color: var(--accent-color);
+      font-size: 1.1em;
+    }
+
+    li:nth-child(2) {
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+
+    li:nth-child(3) {
+      font-weight: bold;
+      color: var(--secondary-color);
     }
 
     @font-face {
       font-family: "Vazir";
       src: url("https://cdn.fontcdn.ir/Font/Persian/Vazir/Vazir.woff2") format("woff2");
+    }
+
+    /* انیمیشن برای دکمه */
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    .pulse {
+      animation: pulse 1.5s infinite;
     }
   </style>
 </head>
@@ -138,30 +172,45 @@
   <header>
     <h2>ذکر روز <span id="weekday-name"></span>: <span id="today-zekr"></span></h2>
     <div class="zekr">تاریخ امروز: <span id="today-date"></span></div>
+    <div>🕒 اوقات شرعی: (در آینده اضافه می‌کنیم)</div>
   </header>
 
   <div class="main">
-    <h2>سلام <span id="username"></span>!</h2>
-    <button class="circle-btn" id="salavatBtn">بفرست صلوات</button>
+    <h2>سلام <span id="username"></span>! 👋</h2>
+    <div class="circle-btn pulse" onclick="increase()" id="salavat-btn">
+      <img src="https://i.ibb.co/0jq6R3y/salavat.png" alt="صلوات">
+    </div>
     <div class="counter-text">تعداد صلوات شما: <span id="count">0</span></div>
   </div>
 
-  <!-- تایپ پاپ‌آپ -->
-  <div class="typing-popup" id="typingPopup">
-    <div class="typing-box" id="typingText"></div>
+  <div class="leaderboard">
+    <h3>🏆 ۱۰ نفر برتر</h3>
+    <ul id="top-users">
+      <li>در حال بارگذاری...</li>
+    </ul>
   </div>
 
-  <!-- پاپ‌آپ نام -->
-  <div class="name-popup" id="namePopup">
-    <div class="name-box">
-      <h3>نام شما؟</h3>
-      <input type="text" id="nameInput" placeholder="مثلاً علی چالاکی">
-      <button onclick="submitName()">تأیید</button>
-    </div>
-  </div>
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js"></script>
 
   <script>
-    const salavatText = "اللهم صل علی محمد و آل محمد";
+    const firebaseConfig = {
+      apiKey: "AIzaSyDu1hU0duoAFDNe9qxjIfPBL8hcGBnMVIA",
+      authDomain: "salavat-counter.firebaseapp.com",
+      projectId: "salavat-counter",
+      storageBucket: "salavat-counter.appspot.com",
+      messagingSenderId: "236630374019",
+      appId: "1:236630374019:web:887659292fcf4ebecccdb6",
+      measurementId: "G-2W0QM3CKRV"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+  </script>
+
+  <script>
     const zekrHaft = [
       "یا رب العالمین", "یا ذالجلال و الاکرام", "یا قاضی الحاجات",
       "یا ارحم الراحمین", "یا حی یا قیوم", "یا ارحم الراحمین", "اللهم صل علی محمد و آل محمد"
@@ -171,57 +220,143 @@
     const jsDay = today.getDay();
     const weekDay = (jsDay + 1) % 7;
 
-    // ذکر و تاریخ
     document.getElementById('today-zekr').textContent = zekrHaft[weekDay];
     document.getElementById('weekday-name').textContent = weekdays[weekDay];
     const persianDate = new Intl.DateTimeFormat('fa-IR-u-nu-latn', { dateStyle: 'full' }).format(today);
     document.getElementById('today-date').textContent = persianDate;
 
-    let username = localStorage.getItem("username");
-    let count = parseInt(localStorage.getItem("salavatCount") || "0");
-    document.getElementById("count").textContent = count;
-
-    if (!username) {
-      document.getElementById("namePopup").style.display = "flex";
+    let name = localStorage.getItem('username');
+    if (!name) {
+      // استفاده از SweetAlert برای دریافت نام کاربر
+      Swal.fire({
+        title: 'سلام دوست عزیز!',
+        text: 'لطفاً نام خود را وارد کنید:',
+        input: 'text',
+        inputPlaceholder: 'نام شما...',
+        background: '#f8f9fa',
+        confirmButtonColor: '#6C63FF',
+        cancelButtonColor: '#FF6584',
+        showCancelButton: false,
+        allowOutsideClick: false,
+        inputValidator: (value) => {
+          if (!value) {
+            return 'لطفاً نام خود را وارد کنید!';
+          }
+        }
+      }).then((result) => {
+        if (result.value) {
+          name = result.value;
+          localStorage.setItem('username', name);
+          document.getElementById('username').textContent = name;
+          updateLeaderboard(name, 0);
+        }
+      });
     } else {
-      document.getElementById("username").textContent = username;
+      document.getElementById('username').textContent = name;
     }
 
-    function submitName() {
-      const name = document.getElementById("nameInput").value.trim();
-      if (name) {
-        localStorage.setItem("username", name);
-        document.getElementById("username").textContent = name;
-        document.getElementById("namePopup").style.display = "none";
+    let count = parseInt(localStorage.getItem('salavatCount') || 0);
+    document.getElementById('count').textContent = count;
+
+    let isPlaying = false;
+
+    function increase() {
+      if (isPlaying) return;
+
+      isPlaying = true;
+      const btn = document.getElementById("salavat-btn");
+      btn.classList.remove("pulse");
+      btn.style.opacity = 0.7;
+      btn.style.transform = "scale(0.95)";
+
+      // نمایش صلوات به صورت تایپ شونده در پاپ آپ
+      const salawatText = "اللهم صل علی محمد و آل محمد";
+      let i = 0;
+      let typedText = "";
+      
+      Swal.fire({
+        title: 'صلوات',
+        html: `<div id="typing-text" style="font-size: 24px; color: #6C63FF; min-height: 60px;"></div>`,
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        background: '#f8f9fa',
+        didOpen: () => {
+          const typingInterval = setInterval(() => {
+            if (i < salawatText.length) {
+              typedText += salawatText.charAt(i);
+              document.getElementById("typing-text").innerHTML = typedText;
+              i++;
+            } else {
+              clearInterval(typingInterval);
+              setTimeout(() => {
+                Swal.close();
+                completeSalawat();
+              }, 500);
+            }
+          }, 100);
+        }
+      });
+
+      function completeSalawat() {
+        count++;
+        localStorage.setItem('salavatCount', count);
+        document.getElementById('count').textContent = count;
+        updateLeaderboard(name, count);
+
+        // بازگرداندن حالت عادی دکمه
+        isPlaying = false;
+        btn.style.opacity = 1;
+        btn.style.transform = "scale(1)";
+        btn.classList.add("pulse");
       }
     }
 
-    document.getElementById("salavatBtn").addEventListener("click", () => {
-      const btn = document.getElementById("salavatBtn");
-      const popup = document.getElementById("typingPopup");
-      const textBox = document.getElementById("typingText");
-
-      btn.disabled = true;
-      textBox.textContent = "";
-      popup.style.display = "flex";
-
-      let i = 0;
-      const typeInterval = setInterval(() => {
-        if (i < salavatText.length) {
-          textBox.textContent += salavatText[i];
-          i++;
-        } else {
-          clearInterval(typeInterval);
-          setTimeout(() => {
-            popup.style.display = "none";
-            count++;
-            localStorage.setItem("salavatCount", count);
-            document.getElementById("count").textContent = count;
-            btn.disabled = false;
-          }, 1000);
+    async function updateLeaderboard(username, count) {
+      try {
+        // ذخیره یا آپدیت کاربر در Firestore
+        if (username) {
+          await db.collection("leaderboard").doc(username).set({
+            name: username,
+            count: count,
+            lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+          });
         }
-      }, 100);
-    });
+
+        // گرفتن ۱۰ کاربر برتر
+        const snapshot = await db.collection("leaderboard")
+          .orderBy("count", "desc")
+          .limit(10)
+          .get();
+
+        const ul = document.getElementById("top-users");
+        ul.innerHTML = "";
+        
+        if (snapshot.empty) {
+          ul.innerHTML = "<li>هنوز کاربری ثبت نشده است</li>";
+          return;
+        }
+        
+        let rank = 1;
+        snapshot.forEach((doc) => {
+          const user = doc.data();
+          let medal = "";
+          if (rank === 1) medal = "🥇";
+          else if (rank === 2) medal = "🥈";
+          else if (rank === 3) medal = "🥉";
+          
+          ul.innerHTML += `<li>${medal} ${rank}. ${user.name}: ${user.count}</li>`;
+          rank++;
+        });
+      } catch (error) {
+        console.error("خطا در ذخیره یا بارگیری اطلاعات:", error);
+        document.getElementById("top-users").innerHTML = "<li>خطا در بارگیری لیست برترین‌ها</li>";
+      }
+    }
+
+    // بارگذاری اولیه لیست برترین‌ها
+    if (name) {
+      updateLeaderboard(name, count);
+    }
   </script>
 
 </body>
