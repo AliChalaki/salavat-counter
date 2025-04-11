@@ -2,13 +2,31 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>صلوات شمار</title>
+  <title>صلوات شمار پیشرفته</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
+    :root {
+      --main-bg: #f0f8ff;
+      --primary-color: #00c853;
+      --primary-dark: #2e7d32;
+      --text-color: #333;
+      --popup-bg: rgba(0, 0, 0, 0.6);
+      --popup-box: #ffffff;
+      --font: "Tahoma", sans-serif;
+    }
+
     body {
-      font-family: sans-serif;
-      background: #f0f8ff;
+      font-family: var(--font);
+      background: var(--main-bg);
+      color: var(--text-color);
+      margin: 0;
       text-align: center;
-      padding: 40px;
+      padding: 40px 20px;
+    }
+
+    h2 {
+      font-size: 26px;
+      margin-bottom: 30px;
     }
 
     .circle-btn {
@@ -16,71 +34,105 @@
       height: 180px;
       border-radius: 50%;
       background-color: #fff;
-      border: 5px solid #00c853;
+      border: 6px solid var(--primary-color);
       display: flex;
       justify-content: center;
       align-items: center;
       cursor: pointer;
       font-size: 20px;
       font-weight: bold;
+      transition: 0.3s ease;
+      margin: 0 auto;
+    }
+
+    .circle-btn:hover {
+      transform: scale(1.05);
+      border-color: var(--primary-dark);
     }
 
     .counter-text {
-      margin-top: 20px;
-      font-size: 22px;
-      color: #2e7d32;
+      margin-top: 25px;
+      font-size: 20px;
+      color: var(--primary-dark);
     }
 
     .popup {
       position: fixed;
       top: 0; right: 0; bottom: 0; left: 0;
-      background: rgba(0,0,0,0.6);
+      background: var(--popup-bg);
       display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 100;
+      z-index: 1000;
     }
 
     .popup-content {
-      background: white;
-      padding: 20px 30px;
+      background: var(--popup-box);
+      padding: 30px;
       border-radius: 15px;
-      font-size: 20px;
-      line-height: 2;
       text-align: right;
-      width: 300px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      width: 90%;
+      max-width: 400px;
+      font-size: 18px;
+      direction: rtl;
+    }
+
+    #namePopup label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
     }
 
     #namePopup input {
       width: 100%;
-      padding: 8px;
-      margin-top: 10px;
+      padding: 10px;
       font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
     }
 
     #namePopup button {
-      margin-top: 15px;
-      padding: 8px 16px;
+      margin-top: 20px;
+      background: var(--primary-color);
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
       font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    #namePopup button:hover {
+      background: var(--primary-dark);
+    }
+
+    #salavatPopup .popup-content {
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      direction: rtl;
     }
   </style>
 </head>
 <body>
 
   <h2>سلام <span id="username">...</span></h2>
+
   <div class="circle-btn" id="salavatBtn">بفرست صلوات</div>
   <div class="counter-text">تعداد صلوات: <span id="count">0</span></div>
 
-  <!-- Popup container -->
+  <!-- Popup برای نمایش تایپ -->
   <div class="popup" id="salavatPopup" style="display: none;">
     <div class="popup-content" id="typingContent"></div>
   </div>
 
-  <!-- Name Popup -->
+  <!-- Popup برای گرفتن نام کاربر -->
   <div class="popup" id="namePopup">
     <div class="popup-content">
-      <label>اسمت چیه؟</label>
-      <input type="text" id="nameInput">
+      <label for="nameInput">لطفاً نام خود را وارد کنید:</label>
+      <input type="text" id="nameInput" placeholder="مثلاً علی چالاکی">
       <button onclick="saveName()">تأیید</button>
     </div>
   </div>
@@ -93,6 +145,7 @@
     const usernameSpan = document.getElementById("username");
     const salavatBtn = document.getElementById("salavatBtn");
 
+    // اگر نام از قبل ذخیره نشده، پاپ‌آپ را نشان بده
     if (username) {
       document.getElementById("namePopup").style.display = "none";
       usernameSpan.textContent = username;
@@ -101,8 +154,8 @@
     countSpan.textContent = count;
 
     function saveName() {
-      const name = document.getElementById("nameInput").value;
-      if (name.trim()) {
+      const name = document.getElementById("nameInput").value.trim();
+      if (name) {
         localStorage.setItem("username", name);
         usernameSpan.textContent = name;
         document.getElementById("namePopup").style.display = "none";
@@ -110,7 +163,7 @@
     }
 
     salavatBtn.addEventListener("click", () => {
-      salavatBtn.style.pointerEvents = "none"; // disable button
+      salavatBtn.style.pointerEvents = "none"; // غیرفعال کردن دکمه
       const popup = document.getElementById("salavatPopup");
       const content = document.getElementById("typingContent");
       content.textContent = "";
@@ -121,14 +174,14 @@
         if (i < salavatText.length) {
           content.textContent += salavatText.charAt(i);
           i++;
-          setTimeout(typeChar, 100); // typing speed
+          setTimeout(typeChar, 100); // سرعت تایپ
         } else {
           setTimeout(() => {
             popup.style.display = "none";
             count++;
             localStorage.setItem("salavatCount", count);
             countSpan.textContent = count;
-            salavatBtn.style.pointerEvents = "auto"; // re-enable button
+            salavatBtn.style.pointerEvents = "auto"; // فعال کردن مجدد
           }, 1000);
         }
       }
