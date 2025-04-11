@@ -30,6 +30,8 @@
       padding: 0 15px;
       min-height: 100vh;
       -webkit-tap-highlight-color: transparent;
+      display: flex;
+      flex-direction: column;
     }
 
     header {
@@ -59,6 +61,7 @@
       margin: 0 auto;
       gap: 20px;
       padding-bottom: 30px;
+      flex: 1;
     }
 
     .main-content {
@@ -186,6 +189,32 @@
       color: var(--bronze-color);
     }
 
+    /* موج پایین صفحه */
+    .wave-container {
+      width: 100%;
+      overflow: hidden;
+      line-height: 0;
+      margin-top: auto;
+    }
+
+    .wave-container svg {
+      width: 100%;
+      height: 50px;
+    }
+
+    .wave-path {
+      animation: wave 3s linear infinite;
+    }
+
+    @keyframes wave {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
     /* بهبود نمایش در موبایل */
     @media (max-width: 768px) {
       header {
@@ -217,6 +246,10 @@
         padding: 10px 15px;
         font-size: 0.9rem;
       }
+      
+      .wave-container svg {
+        height: 40px;
+      }
     }
 
     @media (max-width: 480px) {
@@ -228,6 +261,10 @@
       .action-btn {
         max-width: 100%;
         width: 100%;
+      }
+      
+      .wave-container svg {
+        height: 30px;
       }
     }
   </style>
@@ -261,6 +298,15 @@
         </button>
       </div>
     </div>
+  </div>
+
+  <!-- موج پایین صفحه -->
+  <div class="wave-container">
+    <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <path class="wave-path" d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" fill="#5D3FD3"></path>
+      <path class="wave-path" d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" fill="#5D3FD3"></path>
+      <path class="wave-path" d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" fill="#5D3FD3"></path>
+    </svg>
   </div>
 
   <script>
@@ -324,6 +370,7 @@
       let count = parseInt(localStorage.getItem('salavatCount')) || 0;
       document.getElementById('count').textContent = count;
       let isPlaying = false;
+      let typingInterval;
 
       window.increase = function() {
         if (isPlaying) return;
@@ -338,14 +385,14 @@
         let i = 0;
         let typedText = "";
         
-        Swal.fire({
+        const swalInstance = Swal.fire({
           title: 'صلوات',
           html: `<div id="typing-text" style="font-size: 1.3rem; color: #5D3FD3; min-height: 80px; line-height: 2;"></div>`,
           showConfirmButton: false,
           allowOutsideClick: false,
           background: '#f8f9fa',
           didOpen: () => {
-            const typingInterval = setInterval(() => {
+            typingInterval = setInterval(() => {
               if (i < salawatText.length) {
                 typedText += salawatText.charAt(i);
                 document.getElementById("typing-text").innerHTML = typedText;
@@ -353,24 +400,32 @@
               } else {
                 clearInterval(typingInterval);
                 setTimeout(() => {
-                  Swal.close();
+                  swalInstance.close();
                   completeSalawat();
                 }, 500);
               }
             }, 100);
+          },
+          willClose: () => {
+            clearInterval(typingInterval);
+            isPlaying = false;
+            btn.style.opacity = "1";
+            btn.style.transform = "scale(1)";
+            btn.classList.add("pulse");
           }
         });
+      }
 
-        function completeSalawat() {
-          count++;
-          localStorage.setItem('salavatCount', count);
-          document.getElementById('count').textContent = count;
+      function completeSalawat() {
+        count++;
+        localStorage.setItem('salavatCount', count);
+        document.getElementById('count').textContent = count;
 
-          isPlaying = false;
-          btn.style.opacity = "1";
-          btn.style.transform = "scale(1)";
-          btn.classList.add("pulse");
-        }
+        isPlaying = false;
+        const btn = document.getElementById("salavat-btn");
+        btn.style.opacity = "1";
+        btn.style.transform = "scale(1)";
+        btn.classList.add("pulse");
       }
     }
 
@@ -567,20 +622,98 @@
 
       window.showQuran = function() {
         const surah = surahs[currentSurahIndex];
-        typeTextInPopup(surah.title, surah.text);
+        let typingInterval;
+        let i = 0;
+        let typedText = "";
+        
+        const swalInstance = Swal.fire({
+          title: surah.title,
+          html: `<div id="typing-text" style="font-size: 1.1rem; color: #5D3FD3; min-height: 200px; text-align: right; line-height: 2.5; padding: 10px;"></div>`,
+          showConfirmButton: true,
+          confirmButtonText: 'بستن',
+          confirmButtonColor: '#5D3FD3',
+          background: '#f8f9fa',
+          width: '90%',
+          didOpen: () => {
+            typingInterval = setInterval(() => {
+              if (i < surah.text.length) {
+                typedText += surah.text.charAt(i);
+                document.getElementById("typing-text").innerHTML = typedText.replace(/\n/g, '<br>');
+                i++;
+              } else {
+                clearInterval(typingInterval);
+              }
+            }, 50);
+          },
+          willClose: () => {
+            clearInterval(typingInterval);
+          }
+        });
         
         // تغییر سوره برای دفعه بعدی
         currentSurahIndex = (currentSurahIndex + 1) % surahs.length;
       }
 
       window.showFaraj = function() {
-        const farajText = "اللَّهُمَّ كُنْ لِوَلِيِّكَ الْحُجَّةِ بْنِ الْحَسَنِ\nصَلَوَاتُكَ عَلَيْهِ وَعَلَى آبَائِهِ\nفِي هَذِهِ السَّاعَةِ وَفِي كُلِّ سَاعَةٍ\nوَلِيًّا وَحَافِظًا وَقَائِدًا وَنَاصِرًا\nوَدَلِيلًا وَعَيْناً حَتَّى تُسْكِنَهُ أَرْضَكَ طَوْعًا\nوَتُمَتِّعَهُ فِيهَا طَوِيلًا";
-        typeTextInPopup("دعای فرج", farajText);
+        const farajText = "اللَّهُمَّ كُنْ لِوَلِيِّكَ الْحُجَّةِ بْنِ الْحَسَنِ\nصَلَوَاتُكَ عَلَيْهِ وَعَلَى آبَائِهِ\nفِي هَذِهِ السَّاعَةِ وَفِي کُلِّ سَاعَةٍ\nوَلِيًّا وَحَافِظًا وَقَائِدًا وَنَاصِرًا\nوَدَلِيلًا وَعَيْنًا حَتَّى تُسْکِنَهُ أَرْضَکَ طَوْعًا\nوَتُمَتِّعَهُ فِيهَا طَوِيلًا";
+        let typingInterval;
+        let i = 0;
+        let typedText = "";
+        
+        Swal.fire({
+          title: "دعای فرج",
+          html: `<div id="typing-text" style="font-size: 1.1rem; color: #5D3FD3; min-height: 200px; text-align: right; line-height: 2.5; padding: 10px;"></div>`,
+          showConfirmButton: true,
+          confirmButtonText: 'بستن',
+          confirmButtonColor: '#5D3FD3',
+          background: '#f8f9fa',
+          width: '90%',
+          didOpen: () => {
+            typingInterval = setInterval(() => {
+              if (i < farajText.length) {
+                typedText += farajText.charAt(i);
+                document.getElementById("typing-text").innerHTML = typedText.replace(/\n/g, '<br>');
+                i++;
+              } else {
+                clearInterval(typingInterval);
+              }
+            }, 50);
+          },
+          willClose: () => {
+            clearInterval(typingInterval);
+          }
+        });
       }
 
       window.showNadeh = function() {
-        const nadehText = "اللَّهُمَّ إِنِّي أَشْكُو إِلَيْكَ\nفَقْدَ نَبِيِّنَا صَلَوَاتُكَ عَلَيْهِ وَآلِهِ\nوَغَيْبَةَ وَلِيِّنَا\nوَكَثْرَةَ عَدُوِّنَا\nوَقِلَّةَ عَدَدِنَا\nوَشِدَّةَ الْفِتَنِ بِنَا\nوَتَظَاهُرَ الزَّمَانِ عَلَيْنَا";
-        typeTextInPopup("دعای ندبه", nadehText);
+        const nadehText = "اللَّهُمَّ إِنِّي أَشْکُو إِلَيْکَ\nفَقْدَ نَبِيِّنَا صَلَوَاتُکَ عَلَيْهِ وَآلِهِ\nوَغَيْبَةَ وَلِيِّنَا\nوَکَثْرَةَ عَدُوِّنَا\nوَقِلَّةَ عَدَدِنَا\nوَشِدَّةَ الْفِتَنِ بِنَا\nوَتَظَاهُرَ الزَّمَانِ عَلَيْنَا";
+        let typingInterval;
+        let i = 0;
+        let typedText = "";
+        
+        Swal.fire({
+          title: "دعای ندبه",
+          html: `<div id="typing-text" style="font-size: 1.1rem; color: #5D3FD3; min-height: 200px; text-align: right; line-height: 2.5; padding: 10px;"></div>`,
+          showConfirmButton: true,
+          confirmButtonText: 'بستن',
+          confirmButtonColor: '#5D3FD3',
+          background: '#f8f9fa',
+          width: '90%',
+          didOpen: () => {
+            typingInterval = setInterval(() => {
+              if (i < nadehText.length) {
+                typedText += nadehText.charAt(i);
+                document.getElementById("typing-text").innerHTML = typedText.replace(/\n/g, '<br>');
+                i++;
+              } else {
+                clearInterval(typingInterval);
+              }
+            }, 50);
+          },
+          willClose: () => {
+            clearInterval(typingInterval);
+          }
+        });
       }
 
       window.showAshura = function() {
@@ -590,32 +723,6 @@
           icon: 'info',
           confirmButtonColor: '#5D3FD3',
           confirmButtonText: 'متوجه شدم'
-        });
-      }
-
-      function typeTextInPopup(title, text) {
-        let i = 0;
-        let typedText = "";
-        
-        Swal.fire({
-          title: title,
-          html: `<div id="typing-text" style="font-size: 1.1rem; color: #5D3FD3; min-height: 200px; text-align: right; line-height: 2.5; padding: 10px;"></div>`,
-          showConfirmButton: true,
-          confirmButtonText: 'بستن',
-          confirmButtonColor: '#5D3FD3',
-          background: '#f8f9fa',
-          width: '90%',
-          didOpen: () => {
-            const typingInterval = setInterval(() => {
-              if (i < text.length) {
-                typedText += text.charAt(i);
-                document.getElementById("typing-text").innerHTML = typedText.replace(/\n/g, '<br>');
-                i++;
-              } else {
-                clearInterval(typingInterval);
-              }
-            }, 50);
-          }
         });
       }
     }
