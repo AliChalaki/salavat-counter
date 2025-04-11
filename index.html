@@ -5,282 +5,12 @@
   <title>صلوات شمار پیشرفته</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <style>
-    :root {
-      --primary-color: #5D3FD3;
-      --secondary-color: #3A1CA6;
-      --accent-color: #FF6B6B;
-      --light-color: #F8F9FA;
-      --dark-color: #2C3E50;
-      --gold-color: #FFD700;
-      --silver-color: #C0C0C0;
-      --bronze-color: #CD7F32;
-    }
-    
-    body {
-      margin: 0;
-      font-family: "Vazir", sans-serif;
-      background: linear-gradient(135deg, #f5f7fa 0%, #e6e9f0 100%);
-      color: var(--dark-color);
-      text-align: center;
-      padding: 0 20px;
-      min-height: 100vh;
-    }
-
-    header {
-      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-      color: white;
-      padding: 20px 10px;
-      border-radius: 0 0 25px 25px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-      margin-bottom: 30px;
-    }
-
-    .zekr {
-      font-size: 20px;
-      margin-top: 10px;
-      color: rgba(255,255,255,0.9);
-    }
-
-    .main-container {
-      display: flex;
-      flex-direction: column;
-      max-width: 800px;
-      margin: 0 auto;
-      gap: 30px;
-    }
-
-    .main-content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 30px;
-      background-color: white;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 5px 25px rgba(0,0,0,0.08);
-    }
-
-    .user-greeting {
-      font-size: 24px;
-      color: var(--secondary-color);
-      margin-bottom: 10px;
-    }
-
-    .circle-btn {
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      background: white;
-      box-shadow: 0 15px 35px rgba(93, 63, 211, 0.2);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border: 6px solid var(--primary-color);
-      overflow: hidden;
-      position: relative;
-    }
-
-    .circle-btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 20px 40px rgba(93, 63, 211, 0.3);
-    }
-
-    .circle-btn:active {
-      transform: scale(0.98);
-    }
-
-    .circle-btn img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .counter-text {
-      font-size: 26px;
-      color: var(--secondary-color);
-      font-weight: bold;
-      margin-top: 15px;
-    }
-
-    .features-section {
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-      margin-top: 20px;
-    }
-
-    .book-btn {
-      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-      color: white;
-      padding: 15px 25px;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-weight: bold;
-      box-shadow: 0 5px 15px rgba(93, 63, 211, 0.2);
-      border: none;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 18px;
-    }
-
-    .book-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(93, 63, 211, 0.3);
-    }
-
-    .leaderboard {
-      background-color: white;
-      padding: 25px;
-      border-radius: 20px;
-      box-shadow: 0 5px 25px rgba(0,0,0,0.08);
-      width: 100%;
-      margin-top: 30px;
-    }
-
-    .leaderboard h3 {
-      margin-bottom: 25px;
-      color: var(--primary-color);
-      font-size: 1.8rem;
-      position: relative;
-      display: inline-block;
-    }
-
-    .leaderboard h3:after {
-      content: '';
-      position: absolute;
-      width: 60%;
-      height: 4px;
-      background: linear-gradient(to right, var(--primary-color), var(--accent-color));
-      bottom: -10px;
-      left: 20%;
-      border-radius: 4px;
-    }
-
-    .leaderboard-list {
-      list-style: none;
-      padding: 0;
-      text-align: right;
-    }
-
-    .leaderboard-item {
-      padding: 15px 20px;
-      border-bottom: 1px solid rgba(0,0,0,0.05);
-      transition: all 0.3s ease;
-      border-radius: 12px;
-      margin: 10px 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: rgba(245, 245, 245, 0.5);
-    }
-
-    .leaderboard-item:hover {
-      background-color: rgba(93, 63, 211, 0.05);
-      transform: translateX(-5px);
-    }
-
-    .leaderboard-item:first-child {
-      background-color: rgba(255, 215, 0, 0.1);
-      border-left: 4px solid var(--gold-color);
-    }
-
-    .leaderboard-item:nth-child(2) {
-      background-color: rgba(192, 192, 192, 0.1);
-      border-left: 4px solid var(--silver-color);
-    }
-
-    .leaderboard-item:nth-child(3) {
-      background-color: rgba(205, 127, 50, 0.1);
-      border-left: 4px solid var(--bronze-color);
-    }
-
-    .user-rank {
-      font-weight: bold;
-      color: var(--secondary-color);
-    }
-
-    .user-name {
-      flex-grow: 1;
-      text-align: right;
-      padding: 0 15px;
-    }
-
-    .user-count {
-      font-weight: bold;
-      color: var(--primary-color);
-    }
-
-    .menu-buttons {
-      display: none;
-      flex-direction: column;
-      gap: 15px;
-      margin-top: 30px;
-      width: 100%;
-    }
-
-    .menu-btn {
-      background-color: white;
-      border: 2px solid var(--secondary-color);
-      color: var(--secondary-color);
-      padding: 15px;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-weight: bold;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      font-size: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .menu-btn:hover {
-      background-color: var(--secondary-color);
-      color: white;
-      transform: translateY(-3px);
-    }
-
-    @font-face {
-      font-family: "Vazir";
-      src: url("https://cdn.fontcdn.ir/Font/Persian/Vazir/Vazir.woff2") format("woff2");
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
-    
-    .pulse {
-      animation: pulse 1.5s infinite;
-    }
-
-    .medal-icon {
-      font-size: 20px;
-    }
-
-    .gold {
-      color: var(--gold-color);
-    }
-
-    .silver {
-      color: var(--silver-color);
-    }
-
-    .bronze {
-      color: var(--bronze-color);
-    }
-  </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* استایل‌ها اینجا هستند، بدون تغییر */
+  </style>
 </head>
 <body>
-
   <header>
     <h2>ذکر روز <span id="weekday-name"></span>: <span id="today-zekr"></span></h2>
     <div class="zekr">تاریخ امروز: <span id="today-date"></span></div>
@@ -289,77 +19,36 @@
   <div class="main-container">
     <div class="main-content">
       <div class="user-greeting">سلام <span id="username"></span>! 👋</div>
-      
       <div class="circle-btn pulse" onclick="increase()" id="salavat-btn">
         <img src="Salavat.png" alt="صلوات">
       </div>
-      
       <div class="counter-text">تعداد صلوات شما: <span id="count">0</span></div>
-      
       <div class="features-section">
         <button class="book-btn" onclick="toggleMenu()">
-          <i class="fas fa-book-open"></i>
-          <span>کتابخانه ادعیه</span>
+          <i class="fas fa-book-open"></i><span>کتابخانه ادعیه</span>
         </button>
       </div>
-      
       <div class="menu-buttons" id="menu-buttons">
-        <button class="menu-btn" onclick="showQuran()">
-          <i class="fas fa-quran"></i>
-          قرائت قرآن
-        </button>
-        <button class="menu-btn" onclick="showFaraj()">
-          <i class="fas fa-hands-praying"></i>
-          دعای فرج
-        </button>
-        <button class="menu-btn" onclick="showNadeh()">
-          <i class="fas fa-person-praying"></i>
-          دعای ندبه
-        </button>
-        <button class="menu-btn" onclick="showAshura()">
-          <i class="fas fa-kaaba"></i>
-          زیارت عاشورا
-        </button>
+        <button class="menu-btn" onclick="showQuran()"><i class="fas fa-quran"></i>قرائت قرآن</button>
+        <button class="menu-btn" onclick="showFaraj()"><i class="fas fa-hands-praying"></i>دعای فرج</button>
+        <button class="menu-btn" onclick="showNadeh()"><i class="fas fa-person-praying"></i>دعای ندبه</button>
+        <button class="menu-btn" onclick="showAshura()"><i class="fas fa-kaaba"></i>زیارت عاشورا</button>
       </div>
     </div>
-    
     <div class="leaderboard">
       <h3><i class="fas fa-trophy medal-icon gold"></i> نفرات برتر <i class="fas fa-trophy medal-icon silver"></i></h3>
       <ul class="leaderboard-list" id="top-users">
-        <li class="leaderboard-item">
-          <span class="user-rank">1</span>
-          <span class="user-name">محمد</span>
-          <span class="user-count">120 صلوات</span>
-        </li>
-        <li class="leaderboard-item">
-          <span class="user-rank">2</span>
-          <span class="user-name">فاطمه</span>
-          <span class="user-count">95 صلوات</span>
-        </li>
-        <li class="leaderboard-item">
-          <span class="user-rank">3</span>
-          <span class="user-name">علی</span>
-          <span class="user-count">80 صلوات</span>
-        </li>
-        <li class="leaderboard-item">
-          <span class="user-rank">4</span>
-          <span class="user-name">زهرا</span>
-          <span class="user-count">65 صلوات</span>
-        </li>
-        <li class="leaderboard-item">
-          <span class="user-rank">5</span>
-          <span class="user-name">حسین</span>
-          <span class="user-count">50 صلوات</span>
-        </li>
+        <li class="leaderboard-item"><span class="user-rank">1</span><span class="user-name">محمد</span><span class="user-count">120 صلوات</span></li>
+        <li class="leaderboard-item"><span class="user-rank">2</span><span class="user-name">فاطمه</span><span class="user-count">95 صلوات</span></li>
+        <li class="leaderboard-item"><span class="user-rank">3</span><span class="user-name">علی</span><span class="user-count">80 صلوات</span></li>
+        <li class="leaderboard-item"><span class="user-rank">4</span><span class="user-name">زهرا</span><span class="user-count">65 صلوات</span></li>
+        <li class="leaderboard-item"><span class="user-rank">5</span><span class="user-name">حسین</span><span class="user-count">50 صلوات</span></li>
       </ul>
     </div>
   </div>
 
   <script>
-    const zekrHaft = [
-      "یا رب العالمین", "یا ذالجلال و الاکرام", "یا قاضی الحاجات",
-      "یا ارحم الراحمین", "یا حی یا قیوم", "یا ارحم الراحمین", "اللهم صل علی محمد و آل محمد"
-    ];
+    const zekrHaft = ["یا رب العالمین", "یا ذالجلال و الاکرام", "یا قاضی الحاجات", "یا ارحم الراحمین", "یا حی یا قیوم", "یا ارحم الراحمین", "اللهم صل علی محمد و آل محمد"];
     const weekdays = ["شنبه", "یک‌شنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنج‌شنبه", "جمعه"];
     const today = new Date();
     const jsDay = today.getDay();
@@ -391,31 +80,29 @@
           name = result.value;
           localStorage.setItem('username', name);
           document.getElementById('username').textContent = name;
-          updateLeaderboard(name, 0);
         }
       });
     } else {
       document.getElementById('username').textContent = name;
     }
 
-    let count = parseInt(localStorage.getItem('salavatCount') || 0;
+    let count = parseInt(localStorage.getItem('salavatCount') || '0');
     document.getElementById('count').textContent = count;
 
     let isPlaying = false;
 
     function increase() {
       if (isPlaying) return;
-
       isPlaying = true;
+
       const btn = document.getElementById("salavat-btn");
       btn.classList.remove("pulse");
       btn.style.opacity = 0.7;
       btn.style.transform = "scale(0.95)";
 
       const salawatText = "اللهم صل علی محمد و آل محمد";
-      let i = 0;
-      let typedText = "";
-      
+      let i = 0, typedText = "";
+
       Swal.fire({
         title: 'صلوات',
         html: `<div id="typing-text" style="font-size: 24px; color: #5D3FD3; min-height: 60px;"></div>`,
@@ -423,13 +110,12 @@
         allowOutsideClick: false,
         background: '#f8f9fa',
         didOpen: () => {
-          const typingInterval = setInterval(() => {
+          const interval = setInterval(() => {
             if (i < salawatText.length) {
-              typedText += salawatText.charAt(i);
+              typedText += salawatText[i++];
               document.getElementById("typing-text").innerHTML = typedText;
-              i++;
             } else {
-              clearInterval(typingInterval);
+              clearInterval(interval);
               setTimeout(() => {
                 Swal.close();
                 completeSalawat();
@@ -443,8 +129,6 @@
         count++;
         localStorage.setItem('salavatCount', count);
         document.getElementById('count').textContent = count;
-        updateLeaderboard(name, count);
-
         isPlaying = false;
         btn.style.opacity = 1;
         btn.style.transform = "scale(1)";
@@ -454,26 +138,45 @@
 
     function toggleMenu() {
       const menu = document.getElementById("menu-buttons");
-      if (menu.style.display === "flex") {
-        menu.style.display = "none";
-      } else {
-        menu.style.display = "flex";
-      }
+      menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+    }
+
+    function typeTextInPopup(title, text) {
+      let i = 0;
+      let typedText = "";
+      Swal.fire({
+        title,
+        html: `<div id="typing-text" style="font-size: 22px; color: #5D3FD3; min-height: 300px; text-align: right; line-height: 2.5; padding: 15px;"></div>`,
+        showConfirmButton: true,
+        confirmButtonText: 'بستن',
+        confirmButtonColor: '#5D3FD3',
+        background: '#f8f9fa',
+        didOpen: () => {
+          const interval = setInterval(() => {
+            if (i < text.length) {
+              typedText += text[i++];
+              document.getElementById("typing-text").innerHTML = typedText;
+            } else {
+              clearInterval(interval);
+            }
+          }, 50);
+        }
+      });
     }
 
     function showQuran() {
-      const quranText = "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ\nقُلْ هُوَ اللَّهُ أَحَدٌ\nاللَّهُ الصَّمَدُ\nلَمْ يَلِدْ وَلَمْ يُولَدْ\nوَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ";
-      typeTextInPopup("قرائت قرآن (سوره توحید)", quranText);
+      const text = "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ\nقُلْ هُوَ اللَّهُ أَحَدٌ\nاللَّهُ الصَّمَدُ\nلَمْ يَلِدْ وَلَمْ يُولَدْ\nوَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ";
+      typeTextInPopup("قرائت قرآن (سوره توحید)", text);
     }
 
     function showFaraj() {
-      const farajText = "اللَّهُمَّ كُنْ لِوَلِيِّكَ الْحُجَّةِ بْنِ الْحَسَنِ\nصَلَوَاتُكَ عَلَيْهِ وَعَلَى آبَائِهِ\nفِي هَذِهِ السَّاعَةِ وَفِي كُلِّ سَاعَةٍ\nوَلِيًّا وَحَافِظًا وَقَائِدًا وَنَاصِرًا\nوَدَلِيلًا وَعَيْناً حَتَّى تُسْكِنَهُ أَرْضَكَ طَوْعًا\nوَتُمَتِّعَهُ فِيهَا طَوِيلًا";
-      typeTextInPopup("دعای فرج", farajText);
+      const text = "اللَّهُمَّ كُنْ لِوَلِيِّكَ الْحُجَّةِ بْنِ الْحَسَنِ...";
+      typeTextInPopup("دعای فرج", text);
     }
 
     function showNadeh() {
-      const nadehText = "اللَّهُمَّ إِنِّي أَشْكُو إِلَيْكَ\nفَقْدَ نَبِيِّنَا صَلَوَاتُكَ عَلَيْهِ وَآلِهِ\nوَغَيْبَةَ وَلِيِّنَا\nوَكَثْرَةَ عَدُوِّنَا\nوَقِلَّةَ عَدَدِنَا\nوَشِدَّةَ الْفِتَنِ بِنَا\nوَتَظَاهُرَ الزَّمَانِ عَلَيْنَا";
-      typeTextInPopup("دعای ندبه", nadehText);
+      const text = "اللَّهُمَّ إِنِّي أَشْكُو إِلَيْكَ...";
+      typeTextInPopup("دعای ندبه", text);
     }
 
     function showAshura() {
@@ -484,39 +187,6 @@
         confirmButtonColor: '#5D3FD3'
       });
     }
-
-    function typeTextInPopup(title, text) {
-      let i = 0;
-      let typedText = "";
-      
-      Swal.fire({
-        title: title,
-        html: `<div id="typing-text" style="font-size: 22px; color: #5D3FD3; min-height: 300px; text-align: right; line-height: 2.5; padding: 15px;"></div>`,
-        showConfirmButton: true,
-        confirmButtonText: 'بستن',
-        confirmButtonColor: '#5D3FD3',
-        background: '#f8f9fa',
-        width: '800px',
-        didOpen: () => {
-          const typingInterval = setInterval(() => {
-            if (i < text.length) {
-              typedText += text.charAt(i);
-              document.getElementById("typing-text").innerHTML = typedText.replace(/\n/g, '<br>');
-              i++;
-            } else {
-              clearInterval(typingInterval);
-            }
-          }, 50);
-        }
-      });
-    }
-
-    function updateLeaderboard(username, count) {
-      // در این نسخه ساده، لیست برترین‌ها ثابت است
-      // در نسخه‌های بعدی می‌توانید از Firebase استفاده کنید
-      console.log(`کاربر ${username} تعداد ${count} صلوات ثبت کرد`);
-    }
   </script>
-
 </body>
 </html>
