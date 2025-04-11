@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <title>صلوات شمار پیشرفته</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- فونت وزیر از CDN مطمئن -->
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet" type="text/css" />
+
   <style>
     body {
       margin: 0;
@@ -91,11 +95,6 @@
       padding: 6px 0;
       border-bottom: 1px dashed #ccc;
     }
-
-    @font-face {
-      font-family: "Vazir";
-      src: url("https://cdn.fontcdn.ir/Font/Persian/Vazir/Vazir.woff2") format("woff2");
-    }
   </style>
 </head>
 <body>
@@ -121,9 +120,9 @@
 
   <audio id="salavat-audio" src="salavat.mp3" preload="auto"></audio>
 
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js"></script>
+  <!-- Firebase compat version (برای استفاده در پروژه HTML ساده) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
   <script>
     const firebaseConfig = {
@@ -136,8 +135,7 @@
       measurementId: "G-2W0QM3CKRV"
     };
 
-    // Initialize Firebase
-    const app = firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
   </script>
 
@@ -192,13 +190,11 @@
 
     async function updateLeaderboard(username, count) {
       try {
-        // ذخیره یا آپدیت کاربر در Firestore
         await db.collection("leaderboard").doc(username).set({
           name: username,
           count: count
         });
 
-        // گرفتن ۱۰ کاربر برتر
         const snapshot = await db.collection("leaderboard")
           .orderBy("count", "desc")
           .limit(10)
