@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>صلوات شمار پیشرفته</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- اضافه کردن کتابخانه SweetAlert برای پاپ آپ های زیبا -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
     :root {
@@ -13,8 +12,6 @@
       --accent-color: #FF6584;
       --light-color: #F8F9FA;
       --dark-color: #343A40;
-      --success-color: #28A745;
-      --info-color: #17A2B8;
     }
     
     body {
@@ -86,71 +83,11 @@
       font-weight: bold;
     }
 
-    .online-users {
-      background-color: white;
-      padding: 25px;
-      border-radius: 15px;
-      box-shadow: 0 5px 25px rgba(0,0,0,0.08);
-      max-width: 450px;
-      margin: 0 auto 40px auto;
-      border: 1px solid rgba(0,0,0,0.05);
-    }
-
-    .online-users h3 {
-      margin-bottom: 20px;
-      color: var(--primary-color);
-      font-size: 1.5rem;
-      position: relative;
-      display: inline-block;
-    }
-
-    .online-users h3:after {
-      content: '';
-      position: absolute;
-      width: 50%;
-      height: 3px;
-      background: linear-gradient(to right, var(--primary-color), var(--accent-color));
-      bottom: -8px;
-      left: 25%;
-      border-radius: 3px;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-      text-align: right;
-    }
-
-    li {
-      padding: 10px 15px;
-      border-bottom: 1px solid rgba(0,0,0,0.05);
-      transition: all 0.3s ease;
-      border-radius: 8px;
-      margin: 5px 0;
-      display: flex;
-      justify-content: space-between;
-    }
-
-    li:hover {
-      background-color: rgba(108, 99, 255, 0.05);
-      transform: translateX(-5px);
-    }
-
-    .user-status {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background-color: var(--success-color);
-      margin-left: 8px;
-    }
-
     @font-face {
       font-family: "Vazir";
       src: url("https://cdn.fontcdn.ir/Font/Persian/Vazir/Vazir.woff2") format("woff2");
     }
 
-    /* انیمیشن برای دکمه */
     @keyframes pulse {
       0% { transform: scale(1); }
       50% { transform: scale(1.05); }
@@ -167,43 +104,15 @@
   <header>
     <h2>ذکر روز <span id="weekday-name"></span>: <span id="today-zekr"></span></h2>
     <div class="zekr">تاریخ امروز: <span id="today-date"></span></div>
-    <div>🕒 اوقات شرعی: (در آینده اضافه می‌کنیم)</div>
   </header>
 
   <div class="main">
     <h2>سلام <span id="username"></span>! 👋</h2>
     <div class="circle-btn pulse" onclick="increase()" id="salavat-btn">
-      <img src="https://i.ibb.co/0jq6R3y/salavat.png" alt="صلوات">
+      <img src="salavat.png" alt="صلوات">
     </div>
     <div class="counter-text">تعداد صلوات شما: <span id="count">0</span></div>
   </div>
-
-  <div class="online-users">
-    <h3>👥 کاربران آنلاین</h3>
-    <ul id="online-users-list">
-      <li>در حال بارگذاری...</li>
-    </ul>
-  </div>
-
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js"></script>
-
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyDu1hU0duoAFDNe9qxjIfPBL8hcGBnMVIA",
-      authDomain: "salavat-counter.firebaseapp.com",
-      projectId: "salavat-counter",
-      storageBucket: "salavat-counter.appspot.com",
-      messagingSenderId: "236630374019",
-      appId: "1:236630374019:web:887659292fcf4ebecccdb6",
-      measurementId: "G-2W0QM3CKRV"
-    };
-
-    // Initialize Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-  </script>
 
   <script>
     const zekrHaft = [
@@ -221,14 +130,7 @@
     document.getElementById('today-date').textContent = persianDate;
 
     let name = localStorage.getItem('username');
-    let userId = localStorage.getItem('userId');
-    if (!userId) {
-      userId = Math.random().toString(36).substring(2) + Date.now().toString(36);
-      localStorage.setItem('userId', userId);
-    }
-
     if (!name) {
-      // استفاده از SweetAlert برای دریافت نام کاربر
       Swal.fire({
         title: 'سلام دوست عزیز!',
         text: 'لطفاً نام خود را وارد کنید:',
@@ -236,7 +138,6 @@
         inputPlaceholder: 'نام شما...',
         background: '#f8f9fa',
         confirmButtonColor: '#6C63FF',
-        cancelButtonColor: '#FF6584',
         showCancelButton: false,
         allowOutsideClick: false,
         inputValidator: (value) => {
@@ -249,72 +150,16 @@
           name = result.value;
           localStorage.setItem('username', name);
           document.getElementById('username').textContent = name;
-          registerUserOnline(name);
         }
       });
     } else {
       document.getElementById('username').textContent = name;
-      registerUserOnline(name);
     }
 
-    let count = parseInt(localStorage.getItem('salavatCount') || 0);
+    let count = parseInt(localStorage.getItem('salavatCount') || 0;
     document.getElementById('count').textContent = count;
 
     let isPlaying = false;
-
-    // ثبت کاربر به عنوان آنلاین
-    function registerUserOnline(username) {
-      if (!username) return;
-      
-      const userRef = db.collection("onlineUsers").doc(userId);
-      
-      // اضافه کردن کاربر به لیست آنلاین
-      userRef.set({
-        name: username,
-        count: count,
-        lastActive: firebase.firestore.FieldValue.serverTimestamp(),
-        isOnline: true
-      });
-      
-      // حذف کاربر هنگام بسته شدن صفحه
-      window.addEventListener('beforeunload', () => {
-        userRef.delete();
-      });
-    }
-
-    // گوش دادن به تغییرات لیست کاربران آنلاین
-    function setupOnlineUsersListener() {
-      db.collection("onlineUsers")
-        .orderBy("lastActive", "desc")
-        .onSnapshot((snapshot) => {
-          const ul = document.getElementById("online-users-list");
-          ul.innerHTML = "";
-          
-          if (snapshot.empty) {
-            ul.innerHTML = "<li>هیچ کاربر آنلاینی وجود ندارد</li>";
-            return;
-          }
-          
-          snapshot.forEach((doc) => {
-            const user = doc.data();
-            const isCurrentUser = doc.id === userId;
-            const userElement = `
-              <li>
-                <span>
-                  ${user.name} 
-                  ${isCurrentUser ? '(شما)' : ''}
-                  <span class="user-status"></span>
-                </span>
-                <span>${user.count} صلوات</span>
-              </li>
-            `;
-            ul.innerHTML += userElement;
-          });
-        });
-    }
-
-    // راه‌اندازی گوش‌دهنده برای کاربران آنلاین
-    setupOnlineUsersListener();
 
     function increase() {
       if (isPlaying) return;
@@ -325,7 +170,6 @@
       btn.style.opacity = 0.7;
       btn.style.transform = "scale(0.95)";
 
-      // نمایش صلوات به صورت تایپ شونده در پاپ آپ
       const salawatText = "اللهم صل علی محمد و آل محمد";
       let i = 0;
       let typedText = "";
@@ -357,16 +201,7 @@
         count++;
         localStorage.setItem('salavatCount', count);
         document.getElementById('count').textContent = count;
-        
-        // آپدیت تعداد صلوات کاربر در سیستم آنلاین
-        if (name) {
-          db.collection("onlineUsers").doc(userId).update({
-            count: count,
-            lastActive: firebase.firestore.FieldValue.serverTimestamp()
-          });
-        }
 
-        // بازگرداندن حالت عادی دکمه
         isPlaying = false;
         btn.style.opacity = 1;
         btn.style.transform = "scale(1)";
