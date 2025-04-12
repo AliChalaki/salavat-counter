@@ -19,6 +19,8 @@
     
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
     
     body {
@@ -27,11 +29,11 @@
       background: linear-gradient(135deg, #f5f7fa 0%, #e6e9f0 100%);
       color: var(--dark-color);
       text-align: center;
-      padding: 0 15px;
       min-height: 100vh;
       -webkit-tap-highlight-color: transparent;
       display: flex;
       flex-direction: column;
+      overflow-x: hidden;
     }
 
     header {
@@ -41,6 +43,7 @@
       border-radius: 0 0 20px 20px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
       margin-bottom: 20px;
+      width: 100%;
     }
 
     .header-title {
@@ -60,7 +63,7 @@
       max-width: 800px;
       margin: 0 auto;
       gap: 20px;
-      padding-bottom: 30px;
+      padding: 0 15px 30px;
       flex: 1;
       width: 100%;
     }
@@ -125,8 +128,8 @@
     .circle-btn img {
       width: 100%;
       height: 100%;
-      object-fit: contain;
-      padding: 20px;
+      object-fit: cover;
+      border-radius: 50%;
     }
 
     .counter-text {
@@ -274,12 +277,13 @@
       
       .action-buttons {
         flex-direction: row;
+        justify-content: center;
       }
       
       .action-btn {
         min-width: 140px;
         font-size: 0.9rem;
-        padding: 10px 15px;
+        padding: 12px 15px;
       }
       
       .footer-decoration {
@@ -292,6 +296,10 @@
       
       .counter-text {
         font-size: 1.2rem;
+      }
+      
+      body {
+        padding: 0 10px;
       }
     }
   </style>
@@ -427,7 +435,11 @@
               } else {
                 clearInterval(typingInterval);
                 setTimeout(() => {
-                  swalInstance.close();
+                  swalInstance.update({
+                    showConfirmButton: true,
+                    confirmButtonText: 'بستن',
+                    confirmButtonColor: '#5D3FD3'
+                  });
                   completeSalawat();
                 }, 500);
               }
