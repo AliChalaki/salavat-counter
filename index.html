@@ -434,14 +434,12 @@
                 i++;
               } else {
                 clearInterval(typingInterval);
+                completeSalawat();
+                
+                // بستن خودکار بعد از 3 ثانیه
                 setTimeout(() => {
-                  swalInstance.update({
-                    showConfirmButton: true,
-                    confirmButtonText: 'بستن',
-                    confirmButtonColor: '#5D3FD3'
-                  });
-                  completeSalawat();
-                }, 500);
+                  swalInstance.close();
+                }, 3000);
               }
             }, 100);
           },
